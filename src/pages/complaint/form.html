@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Buat Pesan
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header no-padding>
+      <ion-item>
+        <div class="code" item-start>
+          {{ invoice.code }}
+          <div class="status" [innerHtml]="invoice.status.html"></div>
+        </div>
+        <div class="date" item-end text-right>
+          <strong>{{ transaction.code }}</strong><br>
+          {{ transaction.date }}
+        </div>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content no-padding>
+      <ion-list>
+        <ion-item>
+          <ion-avatar item-start>
+            <img
+              [defaultImage]="defaultPropict"
+              [lazyLoad]="invoice.seller.propict || defaultPropict"
+              [offset]="imageLoadOffset$() | async">
+          </ion-avatar>
+          <div class="caption">Pembelian Dari</div>
+          <div class="seller">{{ invoice.seller.name }}</div>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-list no-margin>
+    <ion-item>
+      <ion-label>Perihal</ion-label>
+      <ion-input [(ngModel)]="subject" placeholder="Perihal"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea [(ngModel)]="message" rows="6" fz-elastic placeholder="Pesan"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+</ion-content>

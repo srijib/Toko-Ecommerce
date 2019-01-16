@@ -1,0 +1,192 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+.tabs .ion-md-add-circle
+  {color:rgba(0, 0, 0,1) !important}
+
+.tabs .ion-ios-add-circle
+  {color:rgba(0, 0, 0,1) !important}
+  .tabs-ios-dark .tab-button[aria-selected=true], .tabs-ios-dark .tab-button[aria-selected=true] .tab-button-icon{
+    color:#A0DFFE
+  }
+.searchbar-wrapper .searchbar{
+  // background: #a71d26;
+
+  &.searchbar-ios{
+    padding: 0 10px 10px 10px;
+  }
+}
+.content{
+  //background: #A0DFFE;
+background: url('../assets/img/bgbiru.png')
+
+
+}
+.loading-content{
+  text-align: center;
+}
+.searchbar{
+  //background-color: #2e0203 !important;
+}
+.item-ios{
+  background-color: transparent;
+}
+.white{
+  color: white;
+}
+
+.label-ios{
+  margin: 0 !important;
+}
+.bglabel{
+  background: url('../assets/img/bglabel.png');
+  background-size: cover;
+  width: 60%;
+  text-align: right;
+  padding-right: 20px;
+}
+
+
+ion-header{
+  margin-top:10px;
+  .toolbar-background{
+    background:black;
+    //border-color: darken(#a71d26, 5%);
+  }
+
+  .back-button-ios{
+
+  }
+
+  .toolbar-title{
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .bar-button-default{
+    color: rgba(255, 255, 255, 1);
+    margin-left: 10px;
+
+    &:hover, &:focus{
+      &:not(.disable-hover){
+        color: rgba(255, 255, 255, .7);
+      }
+    }
+  }
+}
+
+ion-menu{
+  /*.list-header{
+    background: #c8c7cc;
+    }*/
+
+    .profile{
+      background: black !important;
+
+      .label{
+        h2, p{
+          color: #FFFFFF;
+        }
+      }
+    }
+  }
+
+  .product{
+    margin-bottom: 10px;
+
+    .item{
+      background: #FFF;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+      height: 100%;
+      // border: 1px solid #f1f1f1;
+    }
+
+    .meta{
+      padding: 5px;
+      font-size: 1.1rem;
+      .category{
+        font-size: 1rem;
+        margin-bottom: 5px;
+      }
+
+      .caption{
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .price{
+        color: #E73B38;
+      }
+    }
+
+  }
+
+  hr{
+    border: 0;
+    border-top: 1px solid #D3DCE6;
+    &.dashed{
+      background: none;
+      border-top-style: dashed;
+    }
+    &.dotted{
+      background: none;
+      border-top-style:dotted;
+    }
+  }
+
+  .status{
+
+    .label {
+      display: inline;
+      padding: .2em .6em .3em;
+      font-size: 11px;
+      font-weight: bold;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: .25em;
+    }
+
+    .label-warning {
+      background-color: #F39C12;
+      white-space: normal;
+    }
+    .label-success {
+      background-color: #38B44A;
+      white-space: normal;
+    }
+    .label-info {
+      background-color: #3498DB;
+      
+      white-space: normal;
+    }
+    .label-danger {
+      background-color: #E74C3C;
+      white-space: normal;
+    }
+    .label-default {
+      background-color: #95a5a6;
+      white-space: normal;
+    }
+
+    .label.purple{
+      background-color: #4527A0;
+      white-space: normal;
+    }
+  }

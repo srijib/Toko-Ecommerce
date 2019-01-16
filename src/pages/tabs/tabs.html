@@ -1,0 +1,7 @@
+<ion-tabs #tabs color="dark" class="tab-color" [selectedIndex]="tabIndex">
+  <ion-tab #home [root]="tabHome" [rootParams]="paramsHome" tabTitle="Home" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tabProduct" [rootParams]="paramsProduct" tabTitle="Q&A" tabIcon="ios-paw-outline"></ion-tab>
+  <ion-tab tabIcon="md-add-circle" (ionSelect)="parentActionSheet()" class="plus"></ion-tab>
+  <ion-tab [root]="tabCart" [tabBadge]="countCart" tabBadgeStyle="danger" tabTitle="Cart" tabIcon="ios-cart-outline"></ion-tab>
+  <ion-tab tabTitle="More" (ionSelect)="toggleMenu()" tabIcon="ios-more-outline"></ion-tab>
+</ion-tabs>

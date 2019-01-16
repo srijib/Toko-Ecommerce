@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Elzumie
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding no-bounce>
+  <ion-grid>
+    <ion-row align-items-center justify-content-center>
+      <ion-col text-center col-12>
+        <img src="assets/img/elzumi.png" class="logo">
+        <p style="color: black;letter-spacing: 3px;">Elzumie</p>
+        <div style="background-color: rgba(255, 255, 255, 0.5); margin-left: -26px; margin-right: -26px;">
+        <ion-list class="input-login">
+          <ion-item style="background-color: transparent; border:transparent !important;">
+            <ion-input style="text-align: center;" placeholder="Username" type="text" [(ngModel)]="username"></ion-input>
+          </ion-item>
+          <ion-item style="background-color: transparent; border:transparent !important;">
+            <ion-input style="text-align: center;" placeholder="Password" type="password" [(ngModel)]="password"></ion-input>
+          </ion-item>
+        </ion-list>
+        </div>
+        <button ion-button block icon-left (click)="submit()">          
+          Login 
+          <ion-icon name="ios-arrow-round-forward" style="margin-left: 10px;"></ion-icon>
+        </button>
+        <!-- <button ion-button block icon-left class="social-button-facebook" (click)="facebook()">
+          <ion-icon name="logo-facebook"></ion-icon>
+          Facebook
+        </button> -->
+        
+      
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer class="biru">
+  <ion-toolbar class="biru">
+      <button color="baru" padding full ion-button clear class="signup" (click)="register()">
+          
+          SIGN UP FOR FREE <BR> CLICK HERE
+        </button>
+  </ion-toolbar>
+</ion-footer>

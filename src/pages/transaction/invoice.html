@@ -1,0 +1,244 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Detail Transaksi
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid *ngIf="shouldActionShow()">
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-left outline (click)="askApprove()" block>
+          <ion-icon name="ios-checkmark-outline"></ion-icon>
+          Terima Pesanan
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-left (click)="askReject()" block>
+          <ion-icon name="ios-alert-outline"></ion-icon>
+          Tolak Pesanan
+        </button>
+        
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="codeone()">
+    <ion-row>      
+      <ion-col>        
+        <button ion-button icon-left (click)="askReject()" block>
+          <ion-icon name="ios-alert-outline"></ion-icon>
+          Tolak Pesanan
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card no-padding >
+    <ion-card-header >
+      <ion-item>
+        <ion-row>
+          <ion-col col-6>
+
+              <div class="code" item-start align="left">
+                  {{ invoice.code }}
+                  <div class="status" [innerHtml]="invoice.status.html"></div>
+                </div>
+          </ion-col>
+          <ion-col col-6>
+              <div class="date" item-end align="right">
+                  <strong>{{ transaction.code }}</strong><br>
+                  {{ transaction.date }}
+                </div>
+            </ion-col>
+        </ion-row>
+       
+       
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content >
+      <ion-list>
+        <button ion-item (click)="goToStore()">
+          <ion-avatar item-start>
+            <img
+              [defaultImage]="defaultPropict"
+              [lazyLoad]="invoice.seller.propict || defaultPropict"
+              [offset]="imageLoadOffset$() | async">
+          </ion-avatar>
+          <div text-wrap class="caption">Pembelian Dari</div>
+          <div text-wrap class="seller">{{ invoice.seller.name }}</div>
+        </button>
+        <ion-item-divider>Daftar Item</ion-item-divider>
+        <ion-item *ngFor="let item of invoice.items; let productIndex = index">
+          <ion-avatar item-start>
+            <img
+              [defaultImage]="defaultProductImage"
+              [lazyLoad]="item.meta | get:'images.0.thumbnail' || defaultPropict"
+              [offset]="imageLoadOffset$() | async"
+              [alt]="item.meta.title">
+          </ion-avatar>
+          <h2 text-wrap>{{ item.meta.title }}</h2>
+          <p text-wrap>Berat {{ item.weight | numeral }} gram</p>
+          <div item-end text-right class="product-price">
+            <p text-wrap> 
+              {{ item.qty | numeral }} x Rp {{ item.price | numeral }}<br>
+            </p>
+            <hr class="dashed">
+            <p text-wrap>
+              Rp {{ item.total | numeral }}
+            </p>
+          </div>
+        </ion-item>
+        <ion-item-divider color="light">
+          <ion-label text-wrap item-start>Subtotal</ion-label>
+          <ion-label text-wrap  item-end text-right>Rp {{ invoice.subtotal | numeral }}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider color="light">
+          <ion-label text-wrap item-start>Ongkos Kirim</ion-label>
+          <ion-label text-wrap item-end text-right>Rp {{ invoice.shipping_costs | numeral }}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider color="light">
+          <ion-label text-wrap item-start>Total Pembayaran</ion-label>
+          <ion-label text-wrap item-end text-right>Rp {{ invoice.total | numeral }}</ion-label>
+        </ion-item-divider>
+        <ion-item-divider color="light" *ngIf="invoice.status.code==0||invoice.status.code==-1||invoice.status.code==1">
+          <ion-label text-wrap item-start>Batal Otomatis</ion-label>
+          <ion-label text-wrap item-end text-right><span style="background-color: #E74C3C; display: inline;
+padding: .2em .6em .3em;
+font-size: 75%;
+font-weight: bold;
+line-height: 1;
+color: #fff;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+border-radius: .25em;"> {{date * 1000 | date:'dd-MM-yyyy HH:mm:ss'}}</span></ion-label>
+        </ion-item-divider>
+        <div *ngIf="!isSeller()">
+          <ion-item-divider color="light">
+            <ion-label text-wrap item-start>Bukti Pembayaran</ion-label>
+          </ion-item-divider>
+          <ion-item *ngIf="invoice.confirm.id">
+            <ion-label>Bank</ion-label>
+            <p item-end text-wrap>{{ invoice.confirm.bank }}</p>
+          </ion-item>
+          <ion-item *ngIf="invoice.confirm.id">
+            <ion-label>A/N</ion-label>
+            <p item-end text-wrap>{{ invoice.confirm.attn }}</p>
+          </ion-item>
+          <ion-item *ngIf="invoice.confirm.id">
+            <ion-label text-wrap>Jumlah Transfer</ion-label>
+            <p item-end text-wrap>Rp {{ invoice.confirm.amount | numeral }}</p>
+          </ion-item>
+        </div>
+        <ion-item *ngIf="isAdmin()">
+          <p text-wrap *ngIf="!invoice.confirm.id" text-center><em>Tidak ada bukti pembayaran</em></p>
+          <p text-wrap *ngIf="!invoice.confirm.attachment" text-center><em>Tidak ada lampiran pembayaran</em></p>
+          <img
+            *ngIf="invoice.confirm.attachment"
+            [defaultImage]="defaultPropict"
+            [lazyLoad]="invoice.confirm.attachment | get:'thumbnail' || defaultProduct"
+            [offset]="imageLoadOffset$() | async"
+            imageViewer="invoice.confirm.attachment | get:'url'"
+            [alt]="invoice.confirm.attachment | get:'meta.name'">
+        </ion-item>
+        <ion-item-divider text-wrap>Tujuan Pengiriman</ion-item-divider>
+        <ion-item>
+          <h2 text-wrap>Nama Penerima</h2>
+          <p text-wrap>{{ invoice.shipment.attn }}</p>
+        </ion-item>
+        <ion-item>
+          <h2>Alamat</h2>
+          <p text-wrap>
+            {{ invoice.shipment.province }}, {{ invoice.shipment.city }}<br>
+            {{ invoice.shipment.street }}<br>
+            {{ invoice.shipment.post_code }}
+          </p>
+        </ion-item>
+        <ion-item>
+          <h2>No. Telp Penerima</h2>
+          <h3 text-wrap>{{ invoice.shipment.phone }}</h3>
+        </ion-item>
+        <ion-item style="background-color: yellow">
+          <h2>Agen Kurir</h2>
+          <p text-wrap>{{ invoice.shipment.send.courier }}</p>
+          
+         
+        </ion-item>
+        <ion-item *ngIf=invoice.shipment.send.cour_address style="background-color: yellow">
+          <h2>Alamat Kurir</h2>
+          <ion-textarea rows="5" disabled [(ngModel)]="invoice.shipment.send.cour_address"> </ion-textarea>
+         
+        </ion-item>
+
+<ion-item>
+          <h2>Tracking</h2>
+          <p text-wrap>{{ invoice.shipment.send.proof }}</p>
+          <p *ngFor="let item of tracking">{{ item }}</p>
+          
+         
+        </ion-item>
+        <ion-item *ngIf="invoice.shipment.send.notes">
+          <h2 text-wrap>Catatan Pengiriman</h2>
+          <p text-wrap>{{invoice.shipment.send.notes}}</p>          
+        </ion-item>
+        <ion-item>
+          <h2>Bukti Resi</h2>
+          <p text-wrap *ngIf="!invoice.shipment.proof"><em>Tidak ada bukti resi</em></p>
+          <img
+            *ngIf="invoice.shipment.proof"
+            [src]="invoice.shipment.proof | get:'thumbnail'"
+            imageViewer="invoice.shipment.proof | get:'thumbnail'"
+            [alt]="invoice.shipment.proof | get:'meta.name'">
+        </ion-item>
+        <ion-item>
+          <h2>Diterima Tanggal</h2>
+          <p *ngIf="!invoice.shipment.send.receive"><em>Belum Diterima</em></p>
+          <p text-wrap *ngIf="invoice.shipment.send.receive">{{ invoice.shipment.send.receive }}</p>
+        </ion-item>
+        <ion-item-divider>Rating Penjual</ion-item-divider>
+        <ion-item text-center>
+          <rating no-margin [(ngModel)]="invoice.rating.score"
+            readOnly="true"
+            max="5"
+            emptyStarIconName="star-outline"
+            halfStarIconName="star-half"
+            starIconName="star"
+            nullable="false">
+          </rating>
+        </ion-item>
+        <button ion-item (click)="goToReview()">
+          Lihat Ulasan
+        </button>
+        <button ion-item (click)="shipment()" *ngIf="shouldProofShow()">
+          Bukti Pengiriman
+        </button>
+        <button ion-item (click)="shipment()" *ngIf="isAdmin()">
+          Bukti Pengiriman
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <div padding *ngIf="shouldRatingShow()">
+    <button ion-button icon-left block outline (click)="rating()">
+      <ion-icon name="ios-create-outline"></ion-icon>
+      Tulis Ulasan dan Rating
+    </button>
+  </div>
+  <ion-grid *ngIf="shouldReceiveShow()">
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-left block outline (click)="askReceive()">
+          <ion-icon name="ios-checkmark-outline"></ion-icon>
+          Sudah Terima
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-left (click)="askComplaint()" block>
+          <ion-icon name="ios-alert-outline"></ion-icon>
+          Komplain
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

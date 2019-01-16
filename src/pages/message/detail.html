@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ thread.subject }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-margin>
+    <ion-item>
+      <ion-textarea style="color: white" [(ngModel)]="message" fz-elastic rows="3" placeholder="Pesan"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+  <ion-list *ngIf="shouldInvoiceShow()">
+    <ion-item>
+      <ion-avatar item-start>
+        <img [defaultImage]="defaultPropict" [lazyLoad]="invoice.seller.propict || defaultPropict" [offset]="imageLoadOffset$() | async">
+      </ion-avatar>
+      <div item-start>
+        <div class="caption">Pembelian Dari</div>
+        <div class="seller">{{ invoice.seller.name }}</div>
+      </div>
+      <div item-end text-right>
+        <div class="caption">Status Transaksi <strong>{{ invoice.code }}</strong></div>
+        <div class="status" [innerHtml]="invoice.status.html"></div>
+      </div>
+    </ion-item>
+    <button ion-item (click)="goToInvoice()">
+      Detail Invoice
+    </button>
+  </ion-list>
+  <ion-list>
+    <ion-item-divider>
+      <p text-center>Pesan</p>
+    </ion-item-divider>
+    <ion-item-sliding *ngFor="let item of thread.messages; let threadIndex = index">
+      <ion-item *ngIf="user.username === item.username">
+        <ion-avatar item-start>
+          <img  [defaultImage]="defaultPropict" [lazyLoad]="item.propict">
+        </ion-avatar>
+        <h2 style="color: #8e9093;">{{ item.username }} <span *ngIf="item.username === 'admin'" style="display: inline;padding: .2em .6em .3em;font-size: 75%;font-weight: bold;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;background-color: #F39C12;">Admin</span><span *ngIf="item.username !== 'admin'" style="display: inline;padding: .2em .6em .3em;font-size: 75%;font-weight: bold;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;background-color: green;">Member</span></h2>
+        <p text-wrap>{{ item.message}}</p>
+       <!--  <p item-end><small>{{ item.created_at | amTimeAgo }}</small></p> -->
+      </ion-item>
+      <ion-item *ngIf="user.username !== item.username"><!-- 
+        <p item-start><small>{{ item.created_at | amTimeAgo }}</small></p> -->
+        <p text-wrap text-right>{{ item.message}}</p>
+        <h2 text-right style="color: #8e9093;">{{ item.username }} <span *ngIf="item.username === 'admin'" style="display: inline;padding: .2em .6em .3em;font-size: 75%;font-weight: bold;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;background-color: #F39C12;">Admin</span><span *ngIf="item.username !== 'admin'" style="display: inline;padding: .2em .6em .3em;font-size: 75%;font-weight: bold;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;background-color: green;">Member</span></h2>
+        <ion-avatar item-end>
+          <img  [defaultImage]="defaultPropict" [lazyLoad]="item.propict">
+        </ion-avatar>
+      </ion-item>
+    </ion-item-sliding>
+
+    <ion-item *ngIf="!thread.messages.length">
+      <p text-center><em>Tidak ada pesan</em></p>
+    </ion-item>
+  </ion-list>
+</ion-content>

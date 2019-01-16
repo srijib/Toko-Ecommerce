@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Penilaian {{ invoice.seller.name }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-margin>
+    <ion-item>
+      <ion-avatar item-start>
+        <img
+          [defaultImage]="defaultPropict"
+          [lazyLoad]="invoice.seller.propict || defaultPropict"
+          [offset]="imageLoadOffset$() | async">
+      </ion-avatar>
+      <h2>{{ invoice.seller.name }}</h2>
+    </ion-item>
+    <ion-item text-center>
+      <rating no-margin [(ngModel)]="score"
+        readOnly="false"
+        max="5"
+        emptyStarIconName="star-outline"
+        halfStarIconName="star-half"
+        starIconName="star"
+        nullable="false"
+        (ngModelChange)="onRatingChange($event)">
+      </rating>
+    </ion-item>
+    <ion-item>
+      <ion-textarea [(ngModel)]="message" rows="6" fz-elastic placeholder="Ulasan"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+</ion-content>

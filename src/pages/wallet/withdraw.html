@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Wallet Rp {{ user.wallet | numeral }}
+    </ion-title>
+    <ion-buttons end *ngIf="this.canWithdraw">
+      <button ion-button icon-only (click)="create()">
+        <ion-icon name="ios-document-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <h3 text-center class="page-title" style="color: black;">History Withdraw</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Bank</th>
+        <th>A/N</th>
+        <th>Jumlah Dana</th>
+        <th>Tanggal</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody style="color: black;">
+      <tr *ngFor="let item of withdraw.data; let withdrawIndex = index">
+        <td>
+          <strong>{{ item.bank }}</strong>
+          <span class="date">{{ item.account }}</span>
+        </td>
+        <td align="center">{{ item.attn }}</td>
+        <td align="center">{{ item.amount | numeral }}</td>
+        <td align="center">{{ item.date }}</td>
+        <td align="center">
+          <div class="status" [innerHtml]="item.status"></div>
+        </td>
+      </tr>
+      <tr *ngIf="!withdraw.data.length && !isLoading">
+        <td colspan="5"><p text-center><em>Tidak ada data</em></p></td>
+      </tr>
+      <tr *ngIf="isLoading">
+        <td colspan="5"><p text-center><em>Sedang memuat...</em></p></td>
+      </tr>
+    </tbody>
+  </table>
+</ion-content>

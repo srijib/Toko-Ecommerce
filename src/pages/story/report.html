@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Lapor Story {{ story.caption }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #container padding>
+  <ion-card>
+    <ion-item>
+      <ion-avatar item-start>
+        <img [src]="story.user.propict">
+      </ion-avatar>
+      <h2>{{ story.user.name }}</h2>
+      <p>{{ story.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}</p>
+    </ion-item>
+    <div class="video-thumbnail" *ngIf="story.type === 'video'" (click)="playVideo(story.media.url)">
+      <img [src]="story.media.thumbnail">
+    </div>
+    <img [src]="story.media.thumbnail" *ngIf="story.type === 'image'" imageViewer="story.media.url">
+
+    <ion-card-content>
+      <p>{{ story.caption }}</p>
+    </ion-card-content>
+  </ion-card>
+  <ion-list no-margin>
+    <ion-item-divider>Detail Laporan</ion-item-divider>
+    <ion-item>
+      <ion-textarea [(ngModel)]="message" rows="4" fz-elastic placeholder="Pesan"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+</ion-content>

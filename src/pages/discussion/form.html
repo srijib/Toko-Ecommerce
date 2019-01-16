@@ -1,0 +1,125 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Diskusi {{ product.title }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #content padding>
+  <ion-list no-margin>
+    <ion-item style="color: black;">
+      <ion-avatar item-start>
+        <img [defaultImage]="defaultPropict" [lazyLoad]="product.user.propict" [offset]="imageLoadOffset$() | async">
+      </ion-avatar>
+      <h2>{{ product.user.name }}</h2>
+      <p>{{ product.user.username }}</p>
+    </ion-item>
+    <ion-thumbnail class="product-thumbnail">
+      <ion-slides pager *ngIf="product.images.length > 0">
+        <ion-slide *ngFor="let image of product.images">
+          <img [defaultImage]="defaultProductImage" [lazyLoad]="image.thumbnail" [offset]="imageLoadOffset$() | async" [alt]="image.meta.name">
+        </ion-slide>
+      </ion-slides>
+      <img [defaultImage]="defaultProductImage" [lazyLoad]="product.thumbnail" [offset]="imageLoadOffset$() | async" [alt]="product.title" *ngIf="product.images.length === 0">
+    </ion-thumbnail>
+    <ion-item style="color: black;">
+      <ion-label>{{ product.title }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="['stuff', 'myfriends'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <ion-label item-start>Harga</ion-label>
+      <ion-label item-end text-right>Rp {{ product | get:'product.price':0 | numeral }}</ion-label>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>Kategori</ion-label>
+      <ion-label item-end text-right>{{ product.category.title }}</ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list #form style="color: black;">
+    <ion-item-divider style="color: black;">Kirim Pesan Diskusi</ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-textarea [(ngModel)]="message" rows="4" fz-elastic placeholder="Pesan" style="color: black;"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+  <ion-list>
+    <ion-item-divider style="color: black;">Diskusi</ion-item-divider>
+    <div *ngFor="let item of comment.data" style="margin-top:5%">
+      <ion-item *ngIf="item.reply_id=='0'">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-2>
+                <ion-avatar item-start>
+                    <img [defaultImage]="defaultPropict" [lazyLoad]="item.user.propict" [offset]="imageLoadOffset$() | async" [alt]="item.user.name">
+                  </ion-avatar>
+            </ion-col>
+            <ion-col col-6>
+                <h2 text-wrap style="color: black;">{{ item.user.username }} 
+                    <ion-badge color="kuning" *ngIf="item.user.level === 'admin'">Admin</ion-badge><ion-badge color="secondary" *ngIf="item.user.level === 'member'" >Member</ion-badge>
+                  </h2>
+            </ion-col>
+            <ion-col col-4>
+                <p item-end text-wrap>{{ item.created_at | amTimeAgo }}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+                <h3 text-wrap style="color: black;" align="justify">{{ item.message }}</h3>
+            </ion-col>
+
+          </ion-row>
+          <ion-row>
+            <ion-col>
+                <div style="margin-left: 3%;" *ngFor="let itemreply of comment.data">
+                    <ion-item *ngIf="item.id==itemreply.reply_id">
+                        <ion-grid>
+                            <ion-row>
+                              <ion-col col-2>
+                                  <ion-avatar item-start>
+                                      <img [defaultImage]="defaultPropict" [lazyLoad]="itemreply.user.propict" [offset]="imageLoadOffset$() | async" [alt]="itemreply.user.name">
+                                    </ion-avatar>
+                              </ion-col>
+                              <ion-col col-6>
+                                  <h2 text-wrap  style="color: black;">{{ itemreply.user.username }}  <ion-badge color="secondary">Member</ion-badge>
+                                  </h2>
+                              </ion-col>
+                              <ion-col col-4>
+                                  <p item-end text-wrap>{{  itemreply.created_at | amTimeAgo }}</p>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                  <h3 text-wrap style="color: black;" align="justify">{{ itemreply.message }}</h3>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                    </ion-item>
+                  </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+                <button ion-button full color="primary" (click)="goToReply(item.id)">Reply</button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        
+       
+       
+       
+       
+      </ion-item>
+    
+
+    </div>
+
+    <ion-item *ngIf="!comment.data.length">
+      <p text-center><em>Tidak ada diskusi</em></p>
+    </ion-item>
+  </ion-list>
+</ion-content>

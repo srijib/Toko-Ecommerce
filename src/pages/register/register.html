@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Elzumie
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-contact" item-start></ion-icon>
+      <ion-label floating>Nama</ion-label>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-contact" item-start></ion-icon>
+      <ion-label floating>Username</ion-label>
+      <ion-input type="text" [(ngModel)]="username"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="mail" item-start></ion-icon>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="text" [(ngModel)]="email"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-lock" item-start></ion-icon>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-lock" item-start></ion-icon>
+      <ion-label floating>Ulangi Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password_confirmation"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-list no-lines no-margin>
+    <ion-item text-wrap>
+      <ion-label style="color: black;">By signing up on elzumie.com you agree to our Privacy Policy</ion-label>
+      <ion-checkbox color="blue" checked="false" [(ngModel)]="privacy_policy"></ion-checkbox>
+    </ion-item>
+    <ion-item text-center style="color: black;">
+      <a (click)="showPrivacyPolicy()">Read our Privacy Policy</a>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button block icon-left (click)="submit()">
+      <ion-icon name="ios-send"></ion-icon>
+      Daftar
+    </button>
+  </div>
+</ion-content>

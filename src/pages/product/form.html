@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ action() }} {{ product.title }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-margin>
+    <ion-item style="color: black;">
+      <ion-avatar item-start>
+        <img [defaultImage]="defaultPropict" [lazyLoad]="product.user.propict || defaultPropict" [offset]="imageLoadOffset$() | async">
+      </ion-avatar>
+      <h2>{{ product.user.name }}</h2>
+      <p>{{ product.user.username }}</p>
+    </ion-item>
+    <ion-thumbnail class="product-thumbnail">
+      <ion-slides pager *ngIf="product.images.length > 0">
+        <ion-slide *ngFor="let image of product.images">
+          <img [defaultImage]="defaultProductImage" [lazyLoad]="image.thumbnail" imageViewer="image | get:'url'" [alt]="image.meta.name">
+        </ion-slide>
+      </ion-slides>
+      <img [src]="defaultProductImage" [alt]="product.title" *ngIf="product.images.length === 0">
+    </ion-thumbnail>
+    <ion-item style="color: black;">
+      <h2>Kategori</h2>
+      <h3 item-end text-right>{{ product.category.title }}</h3>
+    </ion-item>
+    <ion-item *ngIf="['myfriends'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <ion-label>Sub Kategori</ion-label>
+      <ion-select [(ngModel)]="product.sub" (ionChange)="sub()" id="sub" item-end text-right>        
+        <ion-option *ngFor="let apicategorya of apicategory" value="{{apicategorya.id}}">{{apicategorya.title}}
+        </ion-option>
+      </ion-select>
+      
+    </ion-item>
+    <ion-item *ngIf="['myfriends'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <ion-label>Sub Kategori 2</ion-label>
+      <ion-select [(ngModel)]="product.sub2" id="sub" item-end text-right>        
+        <ion-option *ngFor="let apicategorya of apicategorysub" value="{{apicategorya.id}}">{{apicategorya.title}}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <ion-label>Sub Kategori</ion-label>
+      <ion-select [(ngModel)]="product.sub" id="sub" item-end text-right>        
+        <ion-option *ngFor="let apicategorya of apicategorystuff" value="{{apicategorya.id}}">{{apicategorya.title}}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    
+      
+
+    
+    <div id="txtHint"></div>
+     
+    <ion-item style="color: black;">
+      <ion-label>Nama {{ product.category.title }}</ion-label>
+      <ion-input [(ngModel)]="product.title" item-end text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff'].indexOf(product.category.slug) !== -1">
+      <ion-label>Berat</ion-label>
+      <input [(ngModel)]="product.product.weight" type="tel" currencyMask item-end class="text-input text-input-ios" placeholder="Berat">
+      <p item-end>Gram</p>
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff', 'myfriends'].indexOf(product.category.slug) !== -1">
+      <ion-label>Harga (Rp)</ion-label>
+      <input [(ngModel)]="product.product.price" type="tel" currencyMask item-end class="text-input text-input-ios" placeholder="Harga">
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff'].indexOf(product.category.slug) !== -1">
+      <ion-label>Varian</ion-label>
+      <ion-input [(ngModel)]="product.meta.variant" item-end text-right placeholder="Varian"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff'].indexOf(product.category.slug) !== -1">
+      <ion-label>Stok</ion-label>
+      <ion-input [(ngModel)]="product.product.stock" type="tel" item-end text-right placeholder="Stok"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff'].indexOf(product.category.slug) === -1">
+      <ion-label>Warna</ion-label>
+      <ion-input [(ngModel)]="product.meta.color" item-end text-right placeholder="Warna"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff'].indexOf(product.category.slug) === -1">
+      <ion-label>DOB</ion-label>
+      <ion-datetime type="datetime-local" displayFormat="DD MMMM YYYY" [(ngModel)]="dob"></ion-datetime>
+    </ion-item>
+    <ion-item style="color: black;" *ngIf="['stuff'].indexOf(product.category.slug) === -1">
+      <ion-label>Jenis Kelamin</ion-label>
+      <ion-select [(ngModel)]="product.meta.sex" item-end text-right placeholder="Jenis Kelamin">
+        <ion-option value="Jantan">Jantan</ion-option>
+        <ion-option value="Betina">Betina</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Deskripsi</ion-label>
+      <ion-textarea [(ngModel)]="product.content" rows="4" fz-elastic placeholder="Deskripsi"></ion-textarea>
+    </ion-item>
+    <ion-item-divider style="color: black;">
+      <h2>Gambar</h2>
+      <button ion-button icon-left (click)="addImage()" item-end>
+        <ion-icon name="ios-add-outline"></ion-icon>
+        Tambah Gambar
+      </button>
+    </ion-item-divider>
+    <ion-item-sliding *ngFor="let item of product.images; let imageIndex = index">
+      <ion-item style="color: black;">
+        <ion-avatar item-start>
+          <img [src]="item.url">
+        </ion-avatar>
+        <h2 text-wrap>{{ item.meta | get:'name':'-' }}</h2>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="askRemoveImage(imageIndex)">
+          <ion-icon name="ios-trash-outline"></ion-icon>
+          Hapus
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+    <ion-item *ngIf="!product.images.length">
+      <p text-center style="color: black;"><em>Tidak ada gambar</em></p>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Simpan
+    </button>
+  </div>
+</ion-content>

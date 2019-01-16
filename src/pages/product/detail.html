@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{ product.title }}
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="more()" *ngIf="shouldMoreShow()">
+        <ion-icon name="md-more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-margin>
+    <button ion-item (click)="goToStore()">
+      <ion-avatar item-start>
+        <img [defaultImage]="defaultPropict" [lazyLoad]="product.user.propict || defaultPropict" [offset]="imageLoadOffset$ | async">
+      </ion-avatar>
+      <h2>{{ product.user.name }}</h2>
+      <p>{{ product.user.username }}</p>
+    </button>
+    <ion-thumbnail class="product-thumbnail">
+      <ion-slides pager *ngIf="product.images.length > 0">
+        <ion-slide *ngFor="let image of product.images">
+          <img [defaultImage]="defaultProductImage" [lazyLoad]="image.thumbnail" [offset]="imageLoadOffset$ | async" [offset]="100" [imageViewer]="image | get:'url'" [alt]="image.meta.name">
+        </ion-slide>
+      </ion-slides>
+      <img [defaultImage]="defaultProductImage" [lazyLoad]="product.thumbnail || defaultProductImage" [offset]="imageLoadOffset$ | async" [alt]="product.title" [imageViewer]="product.images | get:'0.url':product.thumbnail" *ngIf="product.images.length === 0">
+    </ion-thumbnail>
+    <ion-item style="color: black;">
+      <ion-label text-wrap>{{ product.title }}</ion-label>
+    </ion-item>
+    <ion-item-divider style="color: black;">Rating Penjual</ion-item-divider>
+    <ion-item text-center style="color: black;">
+      <rating no-margin [(ngModel)]="product.user.rating.avg"
+        readOnly="true"
+        max="5"
+        emptyStarIconName="star-outline"
+        halfStarIconName="star-half"
+        starIconName="star"
+        nullable="false">
+      </rating>
+    </ion-item>
+    <ion-item text-center style="color: black; background-color: yellow" *ngIf="product.category.slug === 'myfriends'">
+      Usahakan untuk bertemu langsung <Br>
+      dengan penjual, gunakan fitur <Br>
+      "minta bantuan Elzumie" <Br>
+      hanya jika mendesak atau di butuhkan
+    </ion-item>
+    <button ion-item (click)="goToReview()" style="color: black;">
+      Lihat Ulasan
+    </button>
+    <ion-item-divider style="color: black;">Detail Produk</ion-item-divider>
+    <ion-item *ngIf="['stuff', 'myfriends'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <ion-label item-start>Harga</ion-label>
+      <ion-label item-end text-right>Rp {{ product | get:'product.price':0 | numeral }}</ion-label>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>Kategori</ion-label>
+      <ion-label item-end text-right>{{ product.category.title }}</ion-label>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <h2 item-start>Berat</h2>
+      <h3 item-end text-right>{{ product.product.weight | numeral }} Gram</h3>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) !== -1 && product.meta.variant" style="color: black;">
+      <h2 item-start>Varian</h2>
+      <h3 item-end>{{ product | get:'meta.variant':'-' }}</h3>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) !== -1" style="color: black;">
+      <h2 item-start>Stok</h2>
+      <h3 item-end>{{ product | get:'product.stock':'-' }}</h3>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) === -1" style="color: black;">
+      <h2 item-start>Warna</h2>
+      <h3 item-end>{{ product | get:'meta.color':'-' }}</h3>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) === -1" style="color: black;">
+      <h2 item-start>DOB</h2>
+      <h3 item-end>{{ product | get:'meta.dob':'-' }}</h3>
+    </ion-item>
+    <ion-item *ngIf="['stuff'].indexOf(product.category.slug) === -1" style="color: black;">
+      <h2 item-start>Jenis Kelamin</h2>
+      <h3 item-end>{{ product | get:'meta.sex':'-' }}</h3>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label text-wrap>{{ product.content }}</ion-label>
+    </ion-item>
+    <ion-item-divider style="color: black;">Kontak</ion-item-divider>
+    <div *ngFor="let item of product.user.profile.social" style="color: black;">
+      <button ion-item (click)="socialClick(item)" *ngIf="item.provider_id" style="color: black;">
+        <ion-icon [name]="socialList.icons | get:item.provider_name" item-start></ion-icon>
+        {{ socialList.labels | get:item.provider_name }}
+        <p item-end>{{ item | get:'provider_id' }}</p>
+      </button>
+    </div>
+    <!-- <button ion-item (click)="socialClick({provider_name: 'mail', provider_id: product.user.email})">
+      <ion-icon name="ios-mail-outline" item-start></ion-icon>
+      Email
+      <p item-end>{{ product | get:'user.email' }}</p>
+    </button> -->
+  </ion-list>
+  <div padding>
+    
+    <div *ngIf="this.storage.retrieve('statuscart') == 'stuff' || this.storage.retrieve('statuscart') == null">
+    <button ion-button icon-left block (click)="addToCart()" *ngIf="product.category.slug === 'stuff' && !isOwner()">
+      <ion-icon name="ios-cart-outline"></ion-icon>
+      Add To Cart
+    </button>
+    </div>
+     <div *ngIf="this.storage.retrieve('statuscart') == 'myfriends' || this.storage.retrieve('statuscart') == null">
+    <button ion-button icon-left block (click)="addToCart()" *ngIf="product.category.slug === 'myfriends' && !isOwner()">
+      <ion-icon name="ios-cart-outline"></ion-icon>
+      Minta bantuan Elzumie
+    </button>
+  </div>
+    <button ion-button icon-left block (click)="goToDiscuss()">
+      <ion-icon name="ios-chatbubbles-outline"></ion-icon>
+      Diskusi
+    </button>
+    
+  </div>
+</ion-content>

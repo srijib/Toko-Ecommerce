@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Diskusi
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list *ngIf="discussions.length > 0" >
+    <button ion-item (click)="goToDiscussion(discussIndex)" *ngFor="let item of discussions; let discussIndex = index">
+      <ion-avatar item-start>
+        <img [defaultImage]="defaultProductImage" [lazyLoad]="item.thumbnail" [alt]="item.title">
+      </ion-avatar>
+      <h2 text-wrap style="color: black;">{{ item.title }}</h2>
+      <p>{{ item.first_comment.user.username }}<ion-badge color="kuning" *ngIf="item.first_comment.user.level === 'admin'">Admin</ion-badge><ion-badge color="secondary" *ngIf="item.first_comment.user.level === 'member'" >Member</ion-badge>&nbsp; {{ item.first_comment.message }}</p>
+    </button>
+  </ion-list>
+  <p text-center *ngIf="isLoading" style="color: black;"><em>Sedang Memuat...</em></p>
+  <p text-center *ngIf="!isLoading && discussions.length === 0" style="color: black;"><em>Tidak ada diskusi</em></p>
+</ion-content>

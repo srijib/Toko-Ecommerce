@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Ajukan Iklan Premium
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item style="color: white;">
+      <ion-label>Judul</ion-label>
+      <ion-input [(ngModel)]="advert.caption" placeholder="Judul Iklan"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea [(ngModel)]="advert.description" rows="3" fz-elastic placeholder="Dekripsi"></ion-textarea>
+    </ion-item>
+    <ion-item style="color: white;">
+      <ion-label>Tanggal Mulai</ion-label>
+      <ion-datetime type="datetime-local" [disabled]="isEdit()" displayFormat="DD MMMM YYYY" [(ngModel)]="advert.start"></ion-datetime>
+    </ion-item>
+    <ion-item style="color: white;">
+      <ion-label>Tanggal Berakhir</ion-label>
+      <ion-datetime type="datetime-local" [disabled]="isEdit()" displayFormat="DD MMMM YYYY" [(ngModel)]="advert.end"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="isEdit()" style="color: white;">
+      <p text-center><small>Untuk mengganti tanggal tayang iklan, silakan hubungi admin</small></p>
+    </ion-item>
+    <ion-item style="color: white;">
+      <ion-label>Aktif</ion-label>
+      <ion-toggle [(ngModel)]="advert.active"></ion-toggle>
+    </ion-item>
+    <ion-item-divider>
+      <h2 style="color: white;">Gambar</h2>
+      <button ion-button icon-left (click)="addImage()" item-end>
+        <ion-icon name="ios-add-outline"></ion-icon>
+        Tambah Gambar
+      </button>
+    </ion-item-divider>
+    <ion-item-sliding>
+      <ion-item style="color: white;">
+        <ion-thumbnail item-start>
+          <img [src]="advert.image | get:'url' || defaultPicture">
+        </ion-thumbnail>
+        <h2 text-wrap *ngIf="advert.image | get:'id':false">{{ advert.image | get:'meta.name':'-' }}</h2>
+        <p text-center *ngIf="!advert.image | get:'id':false"><em>Tidak ada gambar</em></p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="askRemoveImage()">
+          <ion-icon name="ios-trash-outline"></ion-icon>
+          Hapus
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+</ion-content>

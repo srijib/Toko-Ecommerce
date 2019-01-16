@@ -1,0 +1,16 @@
+page-blank {
+  .content{
+    background: #a71d26;
+
+    .grid, .row{
+      height: 100%;
+    }
+
+    img{
+      background: transparent;
+      width: 200px;
+
+      margin: auto;
+    }
+  }
+}

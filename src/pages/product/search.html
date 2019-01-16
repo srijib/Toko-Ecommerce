@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Pencarian {{ searchText }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="productLoadNewRefresher($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid class="product">
+    <ion-row>
+      <ion-col col-12 *ngIf="isLoading">
+        <p text-center><em>Sedang Memuat...</em></p>
+      </ion-col>
+      <ion-col col-4 col-lg-2 *ngFor="let item of product.data; let i = index">
+        <div class="item" (click)="goToDetail(item.id)">
+          <img  [src]="item.thumbnail" style="width: 100%;">
+          <div class="meta">
+            <ion-badge class="category">{{ item.category | get:'title' }}</ion-badge>
+            <div class="caption">{{ item.title }}</div>
+            <div class="price" *ngIf="['stuff', 'myfriends'].indexOf(categoryKey) !== -1">Rp {{ item | get:'product.price':0 | numeral }}</div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="productLoadMore($event)">
+    <ion-infinite-scroll-content loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

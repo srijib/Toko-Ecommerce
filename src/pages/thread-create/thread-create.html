@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>New Thread</ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="cancelNewThread()">
+        <ion-icon name="arrow-back"></ion-icon> Cancel
+      </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card padding>
+    <form [formGroup]="createThreadForm"  >
+        <ion-item >
+            <ion-label floating >Judul</ion-label>
+            <ion-input type="text" value=""  [(ngModel)]="caption" [formControl]="title"></ion-input>
+        </ion-item>
+      
+        <ion-item >
+            <ion-label floating >Pertanyaan</ion-label>
+            <ion-textarea [formControl]="question" [(ngModel)]="content"  rows="6"></ion-textarea>
+        </ion-item>
+      
+        <ion-item>
+            <ion-label >Kategori</ion-label>
+            <ion-select  multiple="false" [formControl]="category" [(ngModel)]="kategori">
+                <ion-option value="Hewan" checked="true">Hewan</ion-option>
+                <ion-option value="Perlengkapan Hewan">Perlengkapan Hewan</ion-option>
+                <ion-option value="Kehilangan">Kehilangan</ion-option>
+                <ion-option value="Adopsi Gratis">Adopsi Gratis</ion-option>
+                
+            </ion-select>
+        </ion-item>
+    
+        <button ion-button type="submit"  color="dark" class="custom-button" (click)="onSubmit()" [disabled]="!createThreadForm.valid" block>Kirim</button>
+    </form>
+</ion-card>
+</ion-content>

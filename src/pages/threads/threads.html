@@ -1,0 +1,53 @@
+<ion-header>
+  <!--<ion-navbar no-border-bottom>
+    <button ion-button menuToggle>
+      <ion-icon name='menu'></ion-icon>
+    </button>
+    <ion-segment [(ngModel)]="segment" (ionChange)="filterThreads(segment)">
+      <ion-segment-button value="all">
+        All
+      </ion-segment-button>
+      <ion-segment-button value="favorites">
+        Favorites
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-buttons end>
+      <button ion-button *ngIf="!internetConnected" (click)="notify('Working offline..')">
+        <ion-icon name="warning"></ion-icon>
+      </button>
+      <button ion-button (click)="createThread()" *ngIf="internetConnected">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>-->
+
+  <ion-toolbar no-border-top>
+      <ion-buttons end>
+          <button ion-button *ngIf="!internetConnected" (click)="notify('Working offline..')">
+            <ion-icon name="warning"></ion-icon>
+          </button>
+        </ion-buttons>
+        
+    <ion-searchbar primary [(ngModel)]="queryText" (ionInput)="searchThreads(queryText)" placeholder="Cari thread.." style="background-color:white">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-fab right bottom >
+        <button ion-fab color="dark" (click)="createThread()" *ngIf="logged"><ion-icon name="add"></ion-icon></button>   
+    </ion-fab>
+  <ion-refresher (ionRefresh)="reloadThreads($event)" *ngIf="segment=='all'">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-list>
+    <forum-thread *ngFor="let thread of threads " [thread]="thread" (onViewComments)="viewComments($event)" (onDelete)="Delete($event)" ></forum-thread>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="10px">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

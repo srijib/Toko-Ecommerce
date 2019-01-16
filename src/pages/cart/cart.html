@@ -1,0 +1,190 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Cart 
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-lines *ngIf="cart.qty > 0">
+    <div *ngFor="let store of cart.data; let storeIndex = index">
+      <ion-item class="product-store" style="color: black;">
+        
+        <ion-avatar item-start>
+          <img
+            [defaultImage]="defaultPropict"
+            [lazyLoad]="store.propict"
+            [alt]="store.name"
+            [offset]="imageLoadOffset$() | async">
+        </ion-avatar>
+
+        <h2>{{ store.name }}</h2>
+        <p *ngIf="shouldLocationShow(store)">{{ store.address.province }}, {{ store.address.city }}</p>
+        <p item-end>Toko {{ store.name }}</p>
+      </ion-item>
+      <ion-item-divider color="light" style="color: black;">
+        Daftar Produk dibeli
+      </ion-item-divider>
+      <ion-item-sliding *ngFor="let product of store.products; let productIndex = index" class="product-item">
+        <ion-item>
+          <ion-avatar item-start>
+            <img
+              [defaultImage]="defaultProductImage"
+              [lazyLoad]="product.thumbnail"
+              [alt]="product.title"
+              [offset]="imageLoadOffset$() | async">
+          </ion-avatar>
+
+          <h2>{{ product.title }}</h2> 
+          <h3>{{ product.content }}</h3>
+          <h3 *ngIf="product.category=='myfriends'" style="color: #4b7394">Harga tertera  {{setmyfriend()}}</h3>
+           <h3 *ngIf="product.category=='myfriends'" style="color: #4b7394">bukan harga final.</h3>
+           <h3 *ngIf="product.category=='myfriends'" style="color: #4b7394">Elzumie akan </h3>
+           <h3 *ngIf="product.category=='myfriends'" style="color: #4b7394">segera menghubungi anda </h3>
+          <p *ngIf="product.category=='stuff'">{{setstuff()}}</p>
+          
+          <p>Berat {{ (product.weight * product.qty) | numeral }} gram</p>
+          <div item-end text-right class="product-price" (click)="adjustQty(storeIndex, productIndex)">
+            <p>
+              {{ product.qty | numeral }} x Rp {{ product.price | numeral }}<br>
+            </p>
+            <hr class="dashed">
+            <p>
+              Rp {{ product.total | numeral }}
+            </p>
+          </div>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="remove(storeIndex, productIndex)">
+            <ion-icon name="ios-trash-outline"></ion-icon>
+            Hapus
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+      <ion-item-divider color="light" style="color: black;">
+        <ion-label item-start>
+          Subtotal
+        </ion-label>
+        <ion-label item-end text-right>Rp {{ store.subtotal | numeral }}</ion-label>
+      </ion-item-divider>
+      <ion-item-divider color="light" style="color: black;">
+        <ion-label text-wrap>
+          Kurir ({{ store.shipping.origin }} - {{ store.shipping.destination }})
+        </ion-label>
+        <ion-select *ngIf="store.weight>0" [(ngModel)]="store.shipping.selected" [compareWith]="compareShipping" (ionChange)="shippingChange(storeIndex)">
+          <ion-option [value]="item" *ngFor="let item of store.shipping.courier">
+            {{ item.courier }} {{ item.service }}
+          </ion-option>
+        </ion-select>
+      </ion-item-divider>
+      <ion-item-divider *ngIf="store.weight>0" style="color: black;">
+        <ion-label item-start>
+          Ongkir ({{ store.qty }} item) {{ (store.weight/1000).toFixed(2) }}Kg
+        </ion-label>
+        <ion-label item-end text-right>Rp {{ store.shipping.selected.value | numeral }}</ion-label>
+      </ion-item-divider>
+      <ion-item-divider color="light" style="color: black;">
+        <ion-label item-start>
+          Total
+        </ion-label>
+        <ion-label item-end text-right>Rp {{ store.total | numeral }}</ion-label>
+      </ion-item-divider>
+      <hr class="dashed separator">
+    </div>
+    <ion-item></ion-item>
+    <ion-item-divider color="light" style="color: black;">
+      <ion-label item-start>
+        Total Belanja
+      </ion-label>
+      <ion-label item-end text-right>Rp {{ cart.total | numeral }}</ion-label>
+    </ion-item-divider>
+    <ion-item-divider style="color: black;">
+      <ion-label item-start>
+        Berat
+      </ion-label>
+      <ion-label item-end text-right>{{ (cart.weight/1000).toFixed(2) }}Kg</ion-label>
+    </ion-item-divider>
+    <ion-item></ion-item>
+    <ion-item-divider color="light" style="color: black;">Pengiriman</ion-item-divider>
+    <ion-item class="shipment" style="color: black;">
+      <ion-label>Provinsi</ion-label>
+      <ion-select [(ngModel)]="shipping.province" [compareWith]="compareSelect" (ngModelChange)="provinceChange()">
+        <ion-option [value]="item.province_id" *ngFor="let item of provinces">{{ item.province }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item class="shipment" style="color: black;">
+      <ion-label>Kota</ion-label>
+      <ion-select [(ngModel)]="shipping.city" [compareWith]="compareSelect" (ngModelChange)="cityChange()">
+        <ion-option [value]="item.city_id" *ngFor="let item of cities">{{ item.city_name }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Kode Pos</ion-label>
+      <ion-input [(ngModel)]="shipping.postal_code" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Alamat</ion-label>
+      <ion-textarea [(ngModel)]="shipping.address" fz-elastic placeholder="Alamat rumah"></ion-textarea>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Catatan</ion-label>
+      <ion-textarea [(ngModel)]="shipping.notes" fz-elastic placeholder="Catatan"></ion-textarea>
+    </ion-item>
+    <ion-item-divider color="light" style="color: black;">Summary</ion-item-divider>
+    <ion-item style="color: black;"m>
+      <ion-label item-start>
+        Subtotal
+      </ion-label>
+      <ion-label item-end text-right>Rp {{ cart.subtotal | numeral }}</ion-label>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Ongkir
+      </ion-label>
+      <ion-label item-end text-right>Rp {{ cart.shipping | numeral }}</ion-label>
+    </ion-item>
+     <ion-item style="color: black;">
+      <ion-label item-start>
+        Biaya Admin Layanan Myfriends 
+      </ion-label>
+      <ion-label item-end text-right>Rp {{ charge | numeral }}</ion-label>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Total 
+      </ion-label>
+      <ion-label item-end text-right>Rp {{ cart.total | numeral }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-grid *ngIf="cart.qty > 0">
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-left (click)="checkout()" block>
+          <ion-icon name="ios-send-outline"></ion-icon>
+          Checkout
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-left (click)="cancel()" block outline style="color: black;">
+          <ion-icon name="ios-close-circle-outline"></ion-icon>
+          Batal
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="empty" *ngIf="cart.qty === 0">
+    <ion-row>
+      <ion-row>
+        <ion-col col-12 text-center align-self-end>
+          <img src="./assets/img/elzumi.png">
+        </ion-col>
+        <ion-col col-12 text-center align-self-start>
+          <h2 style="color: black;">Uppss...</h2>
+          <h2 style="color: black;">Keranjang belanja anda kosong</h2>
+        </ion-col>
+      </ion-row>
+    </ion-row>
+  </ion-grid>
+</ion-content>

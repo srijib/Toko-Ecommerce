@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Pesan
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="create()">
+        <ion-icon name="ios-create-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item-sliding *ngFor="let item of threads; let threadIndex = index">
+      <ion-item (click)="detail(item.id)">
+        <ion-avatar item-start>
+          <img  [defaultImage]="defaultPropict" [lazyLoad]="item.last_message.propict">
+        </ion-avatar>
+        <h2 style="color: black">{{ item.last_message.username }} <ion-badge color="kuning" *ngIf="item.last_message.user_level === 'admin'">Admin</ion-badge><ion-badge color="secondary" *ngIf="item.last_message.user_level === 'member'" >Member</ion-badge></h2>
+        <h3 style="color: black">{{ item.subject }}</h3>
+        <p>{{ item.last_message.message}}</p>
+        <!-- <p item-end><small>{{ item.created_at | amTimeAgo }}</small></p> -->
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+  <p text-center *ngIf="isLoading"><em>Sedang Memuat...</em></p>
+  <p text-center *ngIf="!isLoading && threads.length === 0"><em>Tidak ada pesan</em></p>
+</ion-content>

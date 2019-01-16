@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Komentar Baru</ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="cancelNewComment()">
+        <ion-icon name="arrow-back"></ion-icon> Kembali
+      </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card padding>
+    <form [formGroup]="createCommentForm" >
+        <ion-item [class.error]="!comment.valid && comment.touched">
+            <ion-label floating>Komentar</ion-label>
+            <ion-textarea [(ngModel)]="komen" [formControl]="comment" rows="10"></ion-textarea>
+        </ion-item>
+        <div *ngIf="comment.hasError('required') && comment.touched" class="error-box">* Komentar  Wajib.</div>
+        <div *ngIf="comment.hasError('minlength') && comment.touched" class="error-box">* Minimal 100 Karakter.</div>
+        <br/><br/>
+        <button ion-button type="submit" color="dark" class="custom-button" (click)="onSubmit()" [disabled]="!createCommentForm.valid" block>Kirim</button>
+    </form>
+</ion-card>
+</ion-content>

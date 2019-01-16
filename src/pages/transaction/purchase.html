@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Daftar Pembelian
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-segment [(ngModel)]="filterKey" (ionChange)="changeFilter(filterKey)">
+    <ion-segment-button value="*">
+      Semua
+    </ion-segment-button>
+    <ion-segment-button value="belum-diproses">
+      Belum Diproses
+    </ion-segment-button>
+    <ion-segment-button value="diteruskan-ke-penjual">
+     Diproses Penjual
+    </ion-segment-button>
+    <ion-segment-button value="dalam-proses-pengiriman">
+      Dalam Pengiriman
+    </ion-segment-button>
+    <ion-segment-button value="order-selesai">
+      Sudah Diterima
+    </ion-segment-button>
+    <ion-segment-button value="ditolak">
+      Ditolak
+    </ion-segment-button>
+  </ion-segment>
+  <ion-card *ngFor="let item of purchase.data; let purchaseIndex = index">
+    <ion-card-header no-padding>
+      <ion-item>
+        <ion-row>
+          <ion-col col-6>
+              <div class="code" text-wrap item-start>{{ item.code }}</div>
+          </ion-col>
+          <ion-col col-6>
+              <div class="date" text-wrap item-end>{{ item.date }}</div>
+            </ion-col>
+        </ion-row>
+       
+       
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content no-padding>
+      <ion-list *ngFor="let invoice of item.invoices; let invoiceIndex = index">
+        <ion-item>
+            <ion-grid>
+                <ion-row>
+                  <ion-col col-2>
+                      <ion-avatar item-start>
+                          <img [defaultImage]="defaultPropict" [lazyLoad]="invoice.seller.propict || defaultPropict" [offset]="imageLoadOffset$() | async">
+                        </ion-avatar>
+                  </ion-col>
+                  <ion-col col-6>
+                      <div text-wrap class="caption">Pembelian Dari</div>
+            <div text-wrap class="seller">{{ invoice.seller.name }}</div>
+                    </ion-col>
+                    <ion-col col-4>
+                        <div text-wrap class="caption">Status Transaksi <strong>{{ invoice.code }}</strong></div>
+            <div text-wrap class="status" [innerHtml]="invoice.status.html"></div>
+                      </ion-col>
+                </ion-row>
+              </ion-grid>
+         
+        
+        </ion-item>
+        <button ion-item (click)="goToInvoice(purchaseIndex, invoiceIndex)" >
+          Detail Invoice
+        </button>
+      </ion-list>
+
+      <div padding *ngIf="!item.has_confirm">
+        <button ion-button icon-left (click)="confirm(item)" block>
+          <ion-icon name="ios-create-outline"></ion-icon>
+          Konfirmasi Pembayaran
+        </button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <p text-center *ngIf="isLoading"><em>Sedang Memuat...</em></p>
+  <p text-center *ngIf="!isLoading && purchase.data.length === 0"><em>Tidak ada pembelian</em></p>
+</ion-content>

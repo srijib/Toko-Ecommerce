@@ -1,0 +1,25 @@
+page-withdraw {
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+
+    th, td{
+      border: 1px solid #CCC;
+      padding: 3px;
+    }
+
+    th{
+      background: #F1F1F1;
+      padding: 5px;
+    }
+  }
+
+  .date{
+    color: #8e9093;
+  }
+
+  .page-title{
+    color: #a71d26;
+  }
+}

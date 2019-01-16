@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Notifikasi
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-right (click)="askDismissAll()">
+        Tutup <ion-icon name="ios-close-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-list>
+    <ion-item-sliding *ngFor="let notif of notifications; let notifIndex = index">
+      <ion-item (click)="goToReference(notifIndex)">
+          <ion-icon name="quote" *ngIf="notif.type === 'story'" item-start></ion-icon>
+        <ion-icon name="ios-chatbubbles-outline" *ngIf="notif.type === 'message'" item-start></ion-icon>
+        <ion-icon name="ios-chatbubbles-outline" *ngIf="notif.type === 'forum'" item-start></ion-icon>
+        <ion-icon name="ios-chatboxes-outline" *ngIf="notif.type === 'discussion'" item-start></ion-icon>
+        <ion-icon name="ios-alert-outline" *ngIf="notif.type === 'complaint'" item-start></ion-icon>
+        <ion-icon name="ios-archive-outline" *ngIf="notif.type === 'shipment'" item-start></ion-icon>
+        <ion-icon name="ios-checkmark-circle-outline" *ngIf="notif.type === 'confirm'" item-start></ion-icon>
+        <ion-icon name="ios-cart-outline" *ngIf="(['invoice', 'order']).indexOf(notif.type) !== -1" item-start></ion-icon>
+        <p text-wrap>{{ notif.message }}</p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="askDismiss(notifIndex)">
+          <ion-icon name="ios-close-outline"></ion-icon>
+          Tutup
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <p text-center *ngIf="isLoading"><em>Sedang Memuat...</em></p>
+  <p text-center *ngIf="!isLoading && notifications.length === 0"><em>Tidak ada pemberitahuan</em></p>
+</ion-content>

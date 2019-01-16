@@ -1,0 +1,116 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #container padding>
+  <ion-list>
+    <ion-thumbnail class="user-thumbnail">
+      <img [src]="foto" class="thumbnail">
+    </ion-thumbnail>
+    <button ion-item (click)="changePropict()" style="color: black;">
+      <ion-icon name="ios-camera-outline" item-start></ion-icon>
+      Ganti Foto
+    </button>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-contact-outline" item-start></ion-icon>
+      <ion-label>Nama</ion-label>
+      <ion-input [(ngModel)]="user.name" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-person-outline" item-start></ion-icon>
+      <ion-label>Username</ion-label>
+      <ion-input [(ngModel)]="user.username" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-mail-outline" item-start></ion-icon>
+      <ion-label>Email</ion-label>
+      <ion-input [(ngModel)]="user.email" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-calendar-outline" item-start></ion-icon>
+      <ion-label>Tanggal Lahir</ion-label>
+      <ion-datetime type="datetime-local" displayFormat="DD MMMM YYYY" (ionChange)="dobChange(dob)" [(ngModel)]="dob"></ion-datetime>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="md-people" item-start></ion-icon>
+      <ion-label>Jenis Kelamin</ion-label>
+      <ion-select [(ngModel)]="user.profile.sex">
+        <ion-option value="Laki-laki">Laki-laki</ion-option>
+        <ion-option value="Perempuan">Perempuan</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item-divider color="light">
+      Kontak
+    </ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-call-outline" item-start></ion-icon>
+      <ion-label>HP/Telp</ion-label>
+      <ion-input [(ngModel)]="user.phone" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="logo-whatsapp" item-start></ion-icon>
+      <ion-label>Whatsapp</ion-label>
+      <ion-input [(ngModel)]="user.whatsapp" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-chatbubbles-outline" item-start></ion-icon>
+      <ion-label>Line</ion-label>
+      <ion-input [(ngModel)]="user.line" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-chatboxes-outline" item-start></ion-icon>
+      <ion-label>BBM</ion-label>
+      <ion-input [(ngModel)]="user.bbm" text-right></ion-input>
+    </ion-item>
+    <ion-item-divider color="light">
+      Alamat
+    </ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-label>Provinsi</ion-label>
+      <ion-select [(ngModel)]="user.address.province_id" [compareWith]="compareSelect" (ionChange)="provinceChange()">
+        <ion-option [value]="item.province_id" *ngFor="let item of provinces">{{ item.province }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Kota</ion-label>
+      <ion-select [(ngModel)]="user.address.city_id" [compareWith]="compareSelect">
+        <ion-option [value]="item.city_id" *ngFor="let item of cities">{{ item.city_name }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Kode Pos</ion-label>
+      <ion-input [(ngModel)]="user.address.post_code" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Alamat</ion-label>
+      <ion-textarea [(ngModel)]="user.address.street" fz-elastic placeholder="Alamat rumah"></ion-textarea>
+    </ion-item>
+    <ion-item-divider color="light" text-wrap style="color: black;">
+      <h2 text-center>Keamanan</h2>
+      <p text-center style="color: black;">Kosongkan jika tidak ingin merubah password</p>
+    </ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-lock" item-start></ion-icon>
+      <ion-label floating>Password Lama</ion-label>
+      <ion-input type="password" [(ngModel)]="password.old"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-lock" item-start></ion-icon>
+      <ion-label floating>Password Baru</ion-label>
+      <ion-input type="password" [(ngModel)]="password.new"></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-icon name="ios-lock" item-start></ion-icon>
+      <ion-label floating>Ulangi Password Baru</ion-label>
+      <ion-input type="password" [(ngModel)]="password.confirm"></ion-input>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left (click)="submit()" block>
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Update
+    </button>
+  </div>
+</ion-content>

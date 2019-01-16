@@ -1,0 +1,25 @@
+page-review {
+  .date{
+    color: #8e9093;
+    font-size: 13px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0px;
+
+    &.rating li {
+      padding: 3px 5px !important;
+      background: none;
+      color: #ffb400;
+
+      ion-icon {
+        font-size: 18px;
+      }
+
+      &:last-child{
+        padding-right: 0 !important;
+      }
+    }
+  }
+}

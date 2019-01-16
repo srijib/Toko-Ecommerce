@@ -1,0 +1,282 @@
+<ion-header style="background-color:black">
+  <ion-navbar color="dark">
+    <ion-title float-start></ion-title>
+    <div class="searchbar-wrapper">
+    <ion-searchbar class="text-input" [(ngModel)]="searchText" placeholder="Apa yang anda cari?" (keyup.enter)="search()"></ion-searchbar>
+  </div>
+    <ion-buttons end>
+      <button id="notification-button" ion-button icon-only (click)="gotToNotification()">
+        <ion-badge id="notifications-badge" color="danger" *ngIf="notifications > 0">{{ notifications }}</ion-badge>
+        <ion-icon name="ios-notifications">
+        </ion-icon>
+      </button>
+      <button ion-button icon-only (click)="goToCart()">
+        <ion-icon name="ios-cart"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="toggleMenu()">
+        <ion-icon name="md-more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  
+  <!-- <ion-segment [(ngModel)]="content" (ionChange)="contentChange(content)">
+    <ion-segment-button value="home">
+      Home
+    </ion-segment-button>
+    <ion-segment-button value="story">
+      Story
+    </ion-segment-button>
+  </ion-segment> -->
+</ion-header>
+
+<ion-content #container [class]="containerClass" padding>
+  <ion-refresher (ionRefresh)="storyLoadNewRefresher($event)" *ngIf="content === 'story'">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-refresher (ionRefresh)="homeRefresher($event)" *ngIf="content === 'home'">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <div [ngSwitch]="content">
+    <div *ngSwitchCase="'home'">
+      <div class="divnavtop">
+        <button class="navtop" (click)="goToProduct({category: 'sugar-glider', index: 0})">
+          <img class="imgnav" src="assets/img/sg.png" >
+          <br>
+          SUGAR GLIDER
+        </button>
+        <button class="navtop" (click)="goToProduct({category: 'kucing', index: 0})">
+          <img class="imgnav" src="assets/img/kcg.png" >
+          <br>
+          KUCING
+        </button>
+        <button class="navtop" (click)="goToProduct({category: 'anjing', index: 0})">
+          <img class="imgnav" src="assets/img/anjg.png" >
+          <br>
+          ANJING
+        </button>
+        <button class="navtop" (click)="goToProduct({category: 'myfriends', index: 0})">
+          <img class="imgnav" src="assets/img/kategori.png" >
+          <br>
+          KATEGORI
+        </button>
+        <button class="navtop" (click)="gotostory()">
+          <img class="imgnav" src="assets/img/story.png" >
+          <br>
+          STORY
+        </button>
+        <div style="clear: both;"></div>
+      </div>
+      <ion-slides autoplay="5000" loop="true" speed="3000" pager="true" slidesPerView="auto" centeredSlides="true">
+        <ion-slide>
+          <a href="https://m.youtube.com/channel/UC33LDAyhNb0JQL1Qwo5yvDA/videos"><img class="slider" src="assets/img/ban1.jpeg"/></a>
+        </ion-slide>
+        <ion-slide>
+          <a href="https://m.youtube.com/channel/UC33LDAyhNb0JQL1Qwo5yvDA/videos"><img class="slider" src="assets/img/ban2.jpeg"/></a>
+        </ion-slide>
+      </ion-slides>
+      <div style="text-align: center;">
+        <div class="categorynav">
+          <button class="transparent" (click)="goToProduct({category: 'myfriends', index: 0})">
+            <img src="assets/img/hewan.png" >
+          </button>
+        </div>
+        <div class="categorynav">
+          <button class="transparent" (click)="goToProduct({category: 'stuff', index: 1})">
+            <img src="assets/img/perlengkapan.png" >
+          </button>
+        </div>
+
+        <div style="clear: both;"></div>
+        <div class="categorynav">
+          <button class="transparent" (click)="goToProduct({category: 'losing', index: 3})">
+            <img src="assets/img/kehilangan.png" >
+          </button>
+        </div>
+        <div class="categorynav">
+          <button class="transparent" (click)="goToProduct({category: 'free-adopt', index: 2})">
+            <img src="assets/img/adopsi.png" >
+          </button>
+
+        </div>
+        <div style="clear: both;"></div>
+      </div>
+      <h3 class="advertisement-title" text-center>Story</h3>
+      <ion-card *ngFor="let item of story.data; let i = index"  no-margin no-lines style="width:100%;"> 
+        <ion-item>
+          <ion-avatar item-start>
+            <img [src]="item.user.propict">
+          </ion-avatar>
+          <h2>{{ item.user.name }}</h2>
+          <p>{{ item.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}</p>
+          <button *ngIf="isLogged()" ion-button clear icon-only item-end (click)="storyMore($event, item)">
+            <ion-icon name="md-more"></ion-icon>
+          </button>
+        </ion-item>
+        <div *ngIf="item.type === 'video'" >
+          <video width="100%" controls>
+            <source [src]="item.media.url+'#t=0.1'" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
+          </div>
+          <img [defaultImage]="defaultProductImage" [lazyLoad]="item.media.thumbnail" [scrollObservable]="container.ionScroll" imageViewer="item.media.url" *ngIf="item.type === 'image'">
+  
+          <ion-card-content>
+            <p>{{ item.caption }}</p>
+          </ion-card-content>
+  
+          <ion-row>
+            <ion-col>
+              <button (click)="toggleLove(item)" ion-button icon-left clear [color]="item.is_loved ? 'default' : 'dark'" small>
+                <ion-icon name="heart"></ion-icon>
+                <div>{{ item.summary.loves }} Loves</div>
+              </button>
+            </ion-col>
+            <ion-col>
+              <button ion-button icon-left clear small (click)="goToStoryComment(item)">
+                <ion-icon name="text"></ion-icon>
+                <div>{{ item | get:'summary.comments':0 }} Comments</div>
+              </button>
+            </ion-col>
+            <ion-col align-self-center text-center>
+              <ion-note>
+                {{ item.created_at | amTimeAgo }}
+              </ion-note>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+        <button ion-button outline full align="center" (click)="gotostory()">Lihat Story</button>
+      <h3 class="advertisement-title" text-center>Iklan Premium</h3>
+      <ion-thumbnail class="advertisement-thumbnail">
+        <ion-slides>
+          <ion-slide *ngFor="let chunk of advertisements">
+            <ion-grid>
+              <ion-row>
+                <ion-col col-4 *ngFor="let ads of chunk">
+                  <img
+                  [defaultImage]="defaultProductImage"
+                  [lazyLoad]="ads.image.thumbnail"
+                  [offset]="imageLoadOffset$ | async"
+                
+                  [alt]="ads.image.meta.name"
+                  class="advertisement-item">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-slide>
+        </ion-slides>
+      </ion-thumbnail>
+      <hr>
+      <!-- <ion-grid class="product" *ngFor="let categoryKey of categories.keys; let categoryIndex = index">
+        <ion-row class="category-header">
+          <ion-col col-8>
+            <h3 class="category-title">
+              {{ categories.labels[categoryIndex] }}
+            </h3>
+
+          </ion-col>
+
+          <ion-col col-4 text-right>
+            <button ion-button small clear icon-right (click)="goToProduct({category: categoryKey, index: categoryIndex})">
+              Lihat lainnya
+              <ion-icon name="ios-arrow-dropright"></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col col-12 class="divider">
+            <ion-col *ngIf="categories.labels[categoryIndex]=='MyFriends'"> 
+
+              <div col-6 style="float: left;" *ngFor="let data of submyfriend">
+                <button ion-button small clear icon-right (click)="goToProduct({category: data.slug, index: categoryIndex})">
+
+                  <img class="imgkate" src="https://elzumie.com//img/category/{{data.image}}"> {{data.title}}
+                </button>
+              </div>
+
+            </ion-col>
+            <ion-col *ngIf="categories.labels[categoryIndex]=='Stuff'"> 
+             <div col-6 style="float: left;" *ngFor="let data of substuff">
+
+              <button ion-button small clear icon-right (click)="goToProduct({category: data.slug, index: categoryIndex})">
+
+                <img class="imgkate" src="https://elzumie.com//img/category/{{data.image}}"> {{data.title}}
+              </button>
+            </div>
+          </ion-col>
+
+          <hr>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12 *ngIf="isLoading">
+          <p text-center><em>Sedang Memuat...</em></p>
+        </ion-col>
+        <ion-col col-12 *ngIf="isProductEmpty(categoryKey)">
+          <p text-center><em>Tidak ada produk</em></p>
+        </ion-col>
+        <ion-col col-4 col-lg-2 *ngFor="let item of products[categoryKey]; let i = index">
+          <ion-col *ngIf="categories.labels[categoryIndex]=='MyFriends' || categories.labels[categoryIndex]=='Stuff'">
+          </ion-col>
+          <ion-col *ngIf="categories.labels[categoryIndex]=='Free Adopt' || categories.labels[categoryIndex]=='Losing'">
+            <div class="item" (click)="goToProductDetail(item.id)">
+              <img [defaultImage]="defaultProductImage" [lazyLoad]="item.thumbnail" [scrollObservable]="container.ionScroll" style="width: 100%;">
+              <div class="meta">
+                <div class="caption">{{ item | get:'title':'-' }}</div>
+                <div class="price" *ngIf="['stuff', 'myfriends'].indexOf(categoryKey) !== -1">
+                  Rp {{ item | get:'product.price':0 | numeral }}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+  </div>
+  <div *ngSwitchCase="'story'">
+    <ion-card *ngFor="let item of story.data; let i = index" no-margin no-lines style="width:100%">
+      <ion-item>
+        <ion-avatar item-start>
+          <img [src]="item.user.propict">
+        </ion-avatar>
+        <h2>{{ item.user.name }}</h2>
+        <p>{{ item.created_at | amDateFormat:'D MMMM YYYY, h:mm:ss a' }}</p>
+        <button *ngIf="isLogged()" ion-button clear icon-only item-end (click)="storyMore($event, item)">
+          <ion-icon name="md-more"></ion-icon>
+        </button>
+      </ion-item>
+      <div *ngIf="item.type === 'video'" >
+        <video width="100%" controls>
+          <source [src]="item.media.url+'#t=0.1'" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+        <img [defaultImage]="defaultProductImage" [lazyLoad]="item.media.thumbnail" [scrollObservable]="container.ionScroll" imageViewer="item.media.url" *ngIf="item.type === 'image'">
+
+        <ion-card-content>
+          <p>{{ item.caption }}</p>
+        </ion-card-content>
+
+        <ion-row>
+          <ion-col>
+            <button (click)="toggleLove(item)" ion-button icon-left clear [color]="item.is_loved ? 'default' : 'dark'" small>
+              <ion-icon name="heart"></ion-icon>
+              <div>{{ item.summary.loves }} Loves</div>
+            </button>
+          </ion-col>
+          <ion-col>
+            <button ion-button icon-left clear small (click)="goToStoryComment(item)">
+              <ion-icon name="text"></ion-icon>
+              <div>{{ item | get:'summary.comments':0 }} Comments</div>
+            </button>
+          </ion-col>
+          <ion-col align-self-center text-center>
+            <ion-note>
+              {{ item.created_at | amTimeAgo }}
+            </ion-note>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+  </div>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="storyLoadMore($event)" *ngIf="content === 'story'">
+    <ion-infinite-scroll-content loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

@@ -1,0 +1,8 @@
+// export const baseURL = 'http://localhost:8005/api/'
+// export const baseURL = 'http://172.20.10.3:8005/api/'
+// export const baseURL = 'http://192.168.69.69:8005/api/'
+// export const baseURL = 'http://192.168.1.103:8005/api/'
+// export const baseURL = 'http://192.168.1.16:8005/api/'
+//export const baseURL = 'https://elzumie.com//api/'
+export const baseURL = 'https://elzumie.com/api/'
+//export const baseURL = 'http://localhost/Elzumi/public/api/'

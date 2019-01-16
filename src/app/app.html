@@ -1,0 +1,96 @@
+<ion-menu [content]="nav" (ionOpen)="cek()" >
+  <ion-content>
+    <ion-list *ngIf="!isLogged()">
+      <button  ion-item menuClose detail-none tappable (click)="login()">
+        <ion-icon name="ios-log-in-outline" item-start></ion-icon>
+        Login
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="register()">
+        <ion-icon name="md-person-add" item-start></ion-icon>
+        Daftar
+      </button>
+    </ion-list>
+    <ion-list no-lines *ngIf="isLogged()">
+      <ion-item class="profile">
+        <ion-avatar item-start>
+          <img [src]="foto">
+        </ion-avatar>
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+      </ion-item>
+      
+      <button  ion-item menuClose detail-none tappable (click)="goToHome()">
+        <ion-icon name="ios-home-outline" item-start></ion-icon>
+        Home
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToWallet()">
+        <ion-icon name="ios-cash-outline" item-start></ion-icon>
+        Saldo Wallet
+        <p item-end>Rp {{ user.wallet | numeral }},-</p>
+      </button>
+       <button  ion-item menuClose detail-none tappable (click)="goToComplaint()">
+        <ion-icon name="ios-alert-outline" item-start></ion-icon>
+        Oh No MyFriends!
+      </button>
+      <ion-item-divider class="bglabel">
+        <p style="color: white">PRODUKKU</p>
+      </ion-item-divider>
+      <button  ion-item menuClose detail-none tappable (click)="goToProduct('myfriends')">
+        <ion-icon name="ios-paw-outline" item-start></ion-icon>
+        MyFriends
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToProduct('stuff')">
+        <ion-icon name="ios-shirt-outline" item-start></ion-icon>
+        Stuff
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToProduct('free-adopt')">
+        <ion-icon name="ios-happy-outline" item-start></ion-icon>
+        Free Adopt
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToProduct('losing')">
+        <ion-icon name="ios-sad-outline" item-start></ion-icon>
+        Losing
+      </button>
+      <ion-item-divider class="bglabel">
+        <p style="color: white">TRANSAKSI</p>
+      </ion-item-divider>
+      <button  ion-item menuClose detail-none tappable (click)="goToTrxPurchase()">
+        <ion-icon name="ios-basket-outline" item-start></ion-icon>
+        Pembelian
+         <p item-end> {{ user.purchase | numeral }}</p>
+      </button>
+
+      <button  ion-item menuClose detail-none tappable (click)="goToTrxSales()">
+        <ion-icon name="ios-cash-outline" item-start></ion-icon>
+        Penjualan
+        <p item-end> {{ user.invoice | numeral }}</p>
+      </button>
+      <ion-item-divider class="bglabel">
+        <p style="color: white">AKUN</p>
+      </ion-item-divider>
+      <button  ion-item menuClose detail-none tappable (click)="goToMessage()">
+        <ion-icon name="ios-chatbubbles-outline" item-start></ion-icon>
+        Pesan
+        <p item-end> {{ user.messages | numeral }}</p>
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToDiscussion()">
+        <ion-icon name="ios-chatboxes-outline" item-start></ion-icon>
+        Diskusi
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToProfile()">
+        <ion-icon name="ios-contact-outline" item-start></ion-icon>
+        Profil
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="goToAdvert()">
+        <ion-icon name="ios-desktop-outline" item-start></ion-icon>
+        Iklan Premium
+      </button>
+      <button  ion-item menuClose detail-none tappable (click)="logout()">
+        <ion-icon name="ios-exit-outline" item-start></ion-icon>
+        Logout
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #nav [root]="rootPage"></ion-nav>

@@ -1,0 +1,47 @@
+.tabs{
+  // .tabbar{
+  //   background: #631b1e;
+  // }
+
+  .tab-button-icon,
+  .tab-button-text{
+    color:rgba(160, 223, 254,1);
+  }
+  
+  .tabs-ios-dark .tab-button[aria-selected=true], .tabs-ios-dark .tab-button[aria-selected=true] .tab-button-icon{
+    color:rgba(160, 223, 254,1) !important;
+  }
+  
+  /*.tab-button[aria-selected=true]{
+    background: darken(#a71d26, 10%);
+    .tab-button-icon,
+    .tab-button-text{
+      color: rgba(255, 255, 255, 1);
+    }
+  }*/
+
+  .plus{color:rgba(0, 0, 0,1) !important}
+  .ion-ios-story-outline{
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-image: url('../assets/img/story.png');
+    background-size:cover;
+  }
+  .ion-ios-story{
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-image: url('../assets/img/story.png');
+    background-size:cover;
+
+  }
+  .show-tabbar{
+    height: 49.8px;
+  }
+  .ion-md-add-circle{
+    height: 60px;
+  }
+  #tab-t0-2, #tab-t1-2{
+    background-color: #A0DFFE;
+    color:black
+  }
+}

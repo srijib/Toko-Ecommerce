@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Iklan Premium
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="create()">
+        <ion-icon name="ios-document-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #container padding>
+  <ion-list>
+    <ion-item style="color: black;">
+      <ion-label>Filter</ion-label>
+      <ion-select [(ngModel)]="filter" [compareWith]="compareFilter" (ionChange)="changeFilter()">
+        <ion-option *ngFor="let item of listFilter; let i = index" [value]="item.value">{{ item.label }}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <p text-center *ngIf="!advert.data.length" class="no-data"><em>Tidak ada data</em></p>
+  <ion-card *ngFor="let item of advert.data; let advertIndex = index">
+    <ion-card-header no-padding>
+      <ion-item style="color: black;">
+        <ion-label>{{ item.caption }}</ion-label>
+        <ion-badge item-end [class]="('badge badge-ios ') + (item.published ? 'enabled' : 'disabled')">{{ item.published ? 'Aktif' : 'Tidak Aktif' }}</ion-badge>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content no-padding>
+      <ion-list>
+        <ion-item text-wrap style="color: black;">
+          <ion-thumbnail item-start>
+            <img
+              [lazyLoad]="item.image | get:'thumbnail'"
+              imageViewer="item.image | get:'url'"
+              [defaultImage]="defaultPicture"
+              [scrollObservable]="container.ionScroll">
+          </ion-thumbnail>
+          <div>
+            <div text-right>
+              Tanggal Berlaku
+            </div>
+            <div text-right class="date">
+              {{ item.start }} s/d {{ item.end }}
+            </div>
+          </div>
+        </ion-item>
+        <ion-item style="color: black;">
+          <div>
+            {{ item.description }}
+          </div>
+        </ion-item>
+        <button *ngIf="canEdit(advertIndex)" ion-item (click)="edit(advertIndex)">
+          Edit
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

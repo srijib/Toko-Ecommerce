@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <span *ngIf="type === 'my'">Produkku {{ categories.labels[categoryIndex] }}</span>
+      <span *ngIf="type === 'public'">{{ categories.labels[categoryIndex] }}</span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #container padding>
+  <ion-refresher (ionRefresh)="productLoadNewRefresher($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-list class="filter">
+    <ion-item style="color: black;">
+      <ion-label>Kategori</ion-label>
+      <ion-select *ngIf="title" [(ngModel)]="categoryIndex" [compareWith]="compareCategory" (ionChange)="changeCategory()">
+        <ion-option *ngFor="let label of title; let i = index" [value]="i">{{ label }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="isLogged()" style="color: black;">
+      <ion-label>Tampilkan Produk</ion-label>
+      <ion-select [(ngModel)]="type" (ionChange)="changeCategory()">
+        <ion-option value="my">Produkku</ion-option>
+        <ion-option value="public">Semua Produk</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item-divider color="light" style="color: black;">
+      Filter Lokasi
+    </ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-label>Provinsi</ion-label>
+      <ion-select [(ngModel)]="province_id" [compareWith]="compareSelect" (ionChange)="provinceChange()">
+        <ion-option value="">Semua Provinsi</ion-option>
+        <ion-option [value]="item.province_id" *ngFor="let item of provinces">{{ item.province }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Kota</ion-label>
+      <ion-select [(ngModel)]="city_id" [compareWith]="compareSelect" (ionChange)="cityChange()">
+        <ion-option value="">Semua Kota</ion-option>
+        <ion-option [value]="item.city_id" *ngFor="let item of cities">{{ item.city_name }}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-grid class="product">
+    <ion-row>
+      <ion-col col-12 *ngIf="isLoading">
+        <p text-center><em>Sedang Memuat...</em></p>
+      </ion-col>
+      <ion-col col-12 *ngIf="isProductEmpty()">
+        <p text-center><em>Tidak ada produk</em></p>
+      </ion-col>
+      <ng-container *ngFor="let item of product.data; let i = index">
+      <ion-col col-4 col-lg-2 *ngIf="item.user">
+        <div class="item" (click)="goToDetail(item.id)" >
+          <img [defaultImage]="defaultProductImage" [lazyLoad]="item.thumbnail" [scrollObservable]="container.ionScroll" style="width: 100%;">
+          <div class="meta">
+            <div class="caption">{{ item.title }}</div>
+            <div class="price" *ngIf="['stuff', 'myfriends'].indexOf(categoryKey) !== -1">Rp {{ item | get:'product.price':0 | numeral }}</div>
+          </div>
+        </div>
+      </ion-col>
+    </ng-container>
+    </ion-row>
+  </ion-grid>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="productLoadMore($event)">
+    <ion-infinite-scroll-content loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

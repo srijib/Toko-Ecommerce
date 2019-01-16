@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Daftar Penjualan
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  
+ 
+ <ion-segment [(ngModel)]="filterKey" (ionChange)="changeFilter(filterKey)">
+    <ion-segment-button value="*">
+      Semua
+    </ion-segment-button>
+    <ion-segment-button value="belum-diproses">
+      Belum Diproses
+    </ion-segment-button>
+    <ion-segment-button value="diproses-penjual">
+     Diproses Penjual
+    </ion-segment-button>
+    <ion-segment-button value="dalam-pengiriman">
+      Dalam Pengiriman
+    </ion-segment-button>
+    <ion-segment-button value="sudah-diterima">
+      Sudah Diterima
+    </ion-segment-button>
+    <ion-segment-button value="ditolak">
+      Ditolak
+    </ion-segment-button>
+    <ion-segment-button value="oh-no-my-friends">
+      Oh No MyFriends
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-card *ngFor="let item of sales.data; let invoiceIndex = index">
+    <ion-card-header no-padding>
+      <ion-item>
+        <div class="code" item-start text-wrap>{{ item.code }}</div>
+        <div class="date" item-end text-wrap>{{ item.trx.date }}</div>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content no-padding>
+      <ion-list>
+        <ion-item>
+          <ion-avatar item-start>
+            <img [src]="item.trx.buyer.propict">
+          </ion-avatar>
+          <div item-start>
+            <div class="caption" text-wrap>Penjualan untuk</div>
+            <div class="buyer" text-wrap>{{ item.trx.buyer.name }}</div>
+          </div>
+          <div item-end>
+            <div class="caption" text-wrap>Status Transaksi</div>
+            <div class="status" text-wrap  [innerHtml]="item.status.html"></div>
+          </div>
+        </ion-item>
+        <button ion-item text-wrap (click)="goToInvoice(invoiceIndex)">
+          Detail Invoice
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <p text-center *ngIf="isLoading"><em>Sedang Memuat...</em></p>
+  <p text-center *ngIf="!isLoading && sales.data.length === 0"><em>Tidak ada penjualan</em></p>
+</ion-content>

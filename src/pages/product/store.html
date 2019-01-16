@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Toko {{ store.name }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content #container padding>
+  <ion-refresher (ionRefresh)="productLoadNewRefresher($event)">
+    <ion-refresher-content refreshingText="Loading..."></ion-refresher-content>
+  </ion-refresher>
+  <ion-list class="store" no-margin>
+    <ion-item style="color: black;">
+      <ion-avatar item-start>
+        <img [defaultImage]="defaultPropict" [lazyLoad]="store.propict" [offset]="imageLoadOffset$ | async">
+      </ion-avatar>
+      <h2>Toko {{ store.name }}</h2>
+      <!-- <p>{{ store.email }}</p> -->
+    </ion-item>
+    <ion-item style="color: black;">
+      <h2 item-start>Lokasi</h2>
+      <h3 item-end text-wrap>
+        {{ store.address | get:'province' }},
+        {{ store.address | get:'city' }}
+      </h3>
+    </ion-item>
+    <ion-item-divider style="color: black;">Rating Penjual</ion-item-divider>
+   <ion-item style="color: black;"*ngFor="let count of listRating; let ratingIndex = index">
+      <rating item-left no-margin [(ngModel)]="listRating[ratingIndex]"
+        readOnly="true"
+        max="5"
+        emptyStarIconName="star-outline"
+        halfStarIconName="star-half"
+        starIconName="star"
+        nullable="false">
+      </rating>
+      <h2 item-end text-right>{{ store.rating.count | get:'ratingIndex':0 }}</h2>
+    </ion-item>
+    <button ion-item (click)="goToReview()" style="color: black;">
+      Lihat Ulasan
+    </button>
+    <ion-item-divider style="color: black;">Kontak</ion-item-divider>
+    <div *ngFor="let item of store.profile.social">
+      <button ion-item (click)="socialClick(item)" *ngIf="item.provider_id" style="color: black;">
+        <ion-icon [name]="socialList.icons | get:item.provider_name" item-start></ion-icon>
+        {{ socialList.labels | get:item.provider_name }}
+        <p item-end>{{ item | get:'provider_id' }}</p>
+      </button>
+    </div>
+    <!-- <button ion-item (click)="socialClick({provider_name: 'mail', provider_id: product.user.email})" style="color: black;">
+      <ion-icon name="ios-mail-outline" item-start></ion-icon>
+      Email
+      <p item-end>{{ product | get:'user.email' }}</p>
+    </button> -->
+    <ion-item-divider style="color: black;">Daftar Produk</ion-item-divider>
+  </ion-list>
+  <ion-list>
+    <ion-item style="color: black;">
+      <ion-label>Kategori</ion-label>
+      <ion-select [(ngModel)]="categoryIndex" [compareWith]="compareCategory" (ionChange)="changeCategory()">
+        <ion-option *ngFor="let label of categories.labels; let i = index" [value]="i">{{ label }}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-grid class="product">
+    <ion-row>
+      <ion-col col-12 *ngIf="isLoading">
+        <p text-center><em>Sedang Memuat...</em></p>
+      </ion-col>
+      <ion-col col-12 *ngIf="isProductEmpty()">
+        <p text-center><em>Tidak ada produk</em></p>
+      </ion-col>
+      <ion-col col-4 col-lg-2 *ngFor="let item of product.data; let i = index">
+        <div class="item" (click)="goToDetail(item.id)">
+          <img [defaultImage]="defaultProductImage" [lazyLoad]="item.thumbnail" [scrollObservable]="container.ionScroll" style="width: 100%;">
+          <div class="meta">
+            <div class="caption">{{ item.title }}</div>
+            <div class="price" *ngIf="['stuff', 'myfriends'].indexOf(categoryKey) !== -1">Rp {{ item | get:'product.price':0 | numeral }}</div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="productLoadMore($event)">
+    <ion-infinite-scroll-content loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

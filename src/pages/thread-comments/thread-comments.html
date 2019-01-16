@@ -1,0 +1,60 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Komentar</ion-title>
+        <!-- <ion-buttons end>
+            <button ion-button (click)="showCommentActions()">
+        <ion-icon name="options"></ion-icon>
+      </button>
+        </ion-buttons> -->
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  
+    <ion-list >
+        <ion-item *ngFor="let comment of comments" text-wrap>
+            <ion-card padding>
+
+                <ion-item>
+                    <ion-avatar item-start>
+                        <img [src]="comment.user.propict">
+                       
+                    </ion-avatar>
+                    <h2>{{comment.user.name}}</h2>
+                    <p>{{comment.created_at | date:'medium'}}</p>
+                </ion-item>
+
+                <ion-card-content class="left-border-primary">
+                    <p>{{comment.message}}</p>
+                </ion-card-content>
+
+                <ion-row class="left-border-primary">
+                    <ion-col>
+                        <button ion-button icon-start clear color="dark" small (click)="like(comment.id)">
+        <ion-icon name="thumbs-up"></ion-icon>
+        <div> {{comment.summary_like}}</div>
+      </button>
+                    </ion-col>
+                    <ion-col>
+                        <button ion-button icon-start clear small color="dark" (click)="dislike(comment.id)">
+        <ion-icon name="thumbs-down"></ion-icon>
+        <div> {{comment.summary_dislike}}</div>
+      </button>
+                    </ion-col>
+                    <ion-col center text-center>
+                            <button color="dark" *ngIf="admin|| comment.user.id == user" ion-button icon-start clear small (click)="delete(comment)">
+                                    <ion-icon name="trash"></ion-icon>
+                                    <div> Hapus</div>
+                                  </button>
+                    </ion-col>
+                </ion-row>
+
+            </ion-card>
+            
+        </ion-item>
+    </ion-list>
+
+    <ion-fab right bottom>
+        <button ion-fab color="dark" (click)="createComment()"><ion-icon name="create"></ion-icon></button>
+    </ion-fab>
+</ion-content>

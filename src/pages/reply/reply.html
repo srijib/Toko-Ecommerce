@@ -1,0 +1,49 @@
+<!--
+  Generated template for the ReplyPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+	<ion-navbar>
+		<ion-title>reply</ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+	<div *ngFor="let item of apimaindisc">
+		<ion-item>
+			<h2 style="color: black;">{{ item.username }} <span *ngIf="item.username === 'admin'" style="display: inline;padding: .2em .6em .3em;font-size: 75%;font-weight: bold;line-height: 1;color: #fff;text-align: center;black-space: nowrap;vertical-align: baseline;border-radius: .25em;background-color: #F39C12;">Admin</span></h2>
+
+			<h3 style="color: black;">{{ item.message }}</h3>
+			
+
+		</ion-item>
+	</div>
+	<div *ngFor="let item of apireplydisc">
+		<ion-item>
+			
+			<h2 style="color: black;">{{ item.username }} <span *ngIf="item.username === 'admin'" style="display: inline;padding: .2em .6em .3em;font-size: 75%;font-weight: bold;line-height: 1;color: #fff;text-align: center;black-space: nowrap;vertical-align: baseline;border-radius: .25em;background-color: #F39C12;">Admin</span></h2>
+			
+			<h3 style="color: black;">{{ item.message }}</h3>
+			
+		</ion-item>
+	</div>
+	<ion-list #form>
+		<ion-item-divider style="color: black;">Kirim Pesan Balasan Diskusi</ion-item-divider>
+		<ion-item>
+			<ion-textarea style="color: black;" [(ngModel)]="message" rows="4" fz-elastic placeholder="Pesan"></ion-textarea>
+		</ion-item>
+
+	</ion-list>
+	<div padding>
+		<button ion-button icon-left block (click)="submit()">
+			<ion-icon name="ios-send-outline"></ion-icon>
+			Kirim
+		</button>
+	</div>
+</ion-content>

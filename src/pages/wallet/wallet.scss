@@ -1,0 +1,25 @@
+page-wallet {
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+
+    th, td{
+      border: 1px solid gray;
+      padding: 3px;
+    }
+
+    th{
+      background: #F1F1F1;
+      padding: 5px;
+    }
+  }
+
+  .date{
+    color: gray;
+  }
+
+  .page-title{
+    color: black;
+  }
+}

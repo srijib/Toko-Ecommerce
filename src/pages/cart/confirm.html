@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Konfirmasi Pembayaran
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-item-divider style="color: black;" color="light">
+      Detail Transaksi
+    </ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Total Belanja
+      </ion-label>
+      <p item-end>{{ transaction.total | numeral }}</p>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Nomor Transaksi
+      </ion-label>
+      <p item-end>{{ transaction.code }}</p>
+    </ion-item>
+    <ion-item-divider style="color: black;" color="light">
+      Detail Pembayaran
+    </ion-item-divider>
+    <ion-item style="color: black;">
+      <ion-label>Bank</ion-label>
+      <ion-select  [(ngModel)]="confirm.bank">
+        <ion-option>BCA</ion-option>
+        <ion-option>BRI</ion-option>
+        <ion-option>MANDIRI</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Nama Pemilik Rekening</ion-label>
+      <ion-input type="text"  [(ngModel)]="confirm.attn" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Jumlah Transfer</ion-label>
+      <input [(ngModel)]="confirm.amount" type="tel" currencyMask item-end class="text-input text-input-ios" placeholder="Jumlah Transfer">
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Tanggal Transfer</ion-label>
+      <ion-datetime type="datetime-local" displayFormat="DD MMMM YYYY" [(ngModel)]="confirm.date"></ion-datetime>
+    </ion-item>
+    <ion-item-divider style="color: black;">
+      <h2>Bukti Transfer</h2>
+      <button ion-button icon-left (click)="addImage()" item-end *ngIf="!complete">
+        <ion-icon name="ios-document-outline"></ion-icon>
+        Lampirkan
+      </button>
+    </ion-item-divider>
+    <ion-item-sliding>
+      <ion-item style="color: black;">
+        <ion-thumbnail item-start>
+          <img [src]="defaultPicture" [lazyLoad]="confirm.attachment | get:'url'" [offset]="imageLoadOffset$ | async" alt="Lampiran" imageViewer="confirm.attachment | get:'url'">
+        </ion-thumbnail>
+        <h2 text-wrap *ngIf="confirm.attachment | get:'id':false">{{ confirm.attachment | get:'meta.name':'-' }}</h2>
+        <p text-center *ngIf="!confirm.attachment | get:'id':false"><em>Tidak ada lampiran</em></p>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left (click)="submit()" block *ngIf="!complete">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim Konfirmasi
+    </button>
+    <div *ngIf="complete" text-center>
+      Terimakasih telah melakukan konfirmasi pembayaran, admin akan melakukan proses pengecekan!
+    </div>
+  </div>
+</ion-content>

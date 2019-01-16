@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Buat Pesan
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-margin>
+    <ion-item style="color: black">
+      <ion-label>Penerima</ion-label>
+      <ion-select [(ngModel)]="receipts" multiple>
+        <ion-option *ngFor="let item of listReceipts" [value]="item">{{ item }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item style="color: black">
+      <ion-label>Topik</ion-label>
+      <ion-input [(ngModel)]="subject" placeholder="Topik pesan"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea style="color: black" [(ngModel)]="message" rows="6" fz-elastic placeholder="Pesan"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+</ion-content>

@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Checkout Complete
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-item text-wrap text-center style="color: black;">
+      Terima Kasih Telah Melakukan Transaksi pada Elzumie
+    </ion-item>
+    <ion-item text-wrap text-center style="color: black;">
+      Pemesanan selesai, silahkan melakukan pembayaran via transfer untuk melanjutkan transaksi.
+      Khusus untuk pembelian hewan, tim kami akan segera mengirimkan detail ongkos kirim hewan melalui email.
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Total Belanja
+      </ion-label>
+      <p item-end>{{ transaction.subtotal | numeral }}</p>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Kode Unik
+      </ion-label>
+      <p item-end>{{ transaction.code_double | numeral }}</p>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Total 
+      </ion-label>
+      <p item-end>{{ transaction.total | numeral }}</p>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label item-start>
+        Nomor Transaksi
+      </ion-label>
+      <p item-end>{{ transaction.code }}</p>
+    </ion-item>
+  </ion-list>
+  <p text-center style="color: black;">Silakan melakukan pembayaran melalui bank dibawah ini</p>
+  <div class="bank-list">
+    <div class="bank-item">
+      <img src="./assets/img/bank/bca.png" alt="Bank BCA">
+      <h2 style="color: black;">a/n PT. Segara Multi Sejahtera</h2>
+      <h2 style="color: black;">7935884888</h2>
+    </div>
+    <!-- <div class="bank-item">
+      <img src="./assets/img/bank/bri.png" alt="Bank BRI">
+      <h2>a/n CV. Elzumi</h2>
+      <h2>0082-01-001096-56-15</h2>
+    </div> -->
+    <div class="bank-item">
+      <img src="./assets/img/bank/mandiri.png" alt="Bank Mandiri">
+      <h2 style="color: black;">a/n PT. Segara Multi Sejahtera</h2>
+      <h2 style="color: black;">1480015840450</h2>
+    </div>
+  </div>
+  <ol style="color: black;">
+    <li>Transfer ke salah satu pilihan bank diatas.</li>
+    <li>Lakukan konfirmasi pembayaran, pastikan anda mengisi semua data dengan benar karna order tidak bisa kami lanjutkan apabila belum ada konfirmasi dari anda.</li>
+    <li>Pemesanan akan kami batalkan apabila tidak ada konfirmasi dalam waktu 2 hari.</li>
+  </ol>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button ion-button icon-left (click)="confirm()" block>
+          <ion-icon name="ios-create-outline"></ion-icon>
+          Konfirmasi
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button icon-left (click)="backToHome()" block outline style="color: black;">
+          <ion-icon name="ios-home-outline"></ion-icon>
+          Kembali Ke Beranda
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

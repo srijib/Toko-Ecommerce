@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Bukti Pengiriman
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <em *ngIf="invoice.details[0]=='myfriends'" style="color: black;">Silahkan kirimkan hewan anda melalui ekspedisi yang tertera disini, sesuai dengan tarif ekspedisi yang tercantum. Segala masalah yang terjadi selama pengiriman jika menggunakan ekspedisi selain yang kami cantumkan disini adalah tanggung jawab penjual sepenuhnya</em>
+    <ion-item style="background-color: yellow; color: black;">
+      <ion-label>Kurir Pengiriman</ion-label>
+      <ion-input [(ngModel)]="shipment.courier" placeholder="Kurir Pengiriman" text-right></ion-input>
+    </ion-item>
+    <ion-item style="background-color: yellow; color: black;">
+      <ion-label >Alamat Kurir</ion-label>
+      <ion-textarea disabled [(ngModel)]="shipment.cour_address" rows="3" fz-elastic placeholder="Alamat Kurir"></ion-textarea>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-label>Nomor Resi</ion-label>
+      <ion-input [(ngModel)]="shipment.proof" placeholder="Nomor Resi" text-right></ion-input>
+    </ion-item>
+    <ion-item style="color: black;">
+      <ion-textarea style="color: black;" [(ngModel)]="shipment.notes" rows="3" fz-elastic placeholder="Catatan Pengiriman"></ion-textarea>
+    </ion-item>
+    <ion-item-divider style="color: black;">
+      <h2>Lampiran Bukti</h2>
+      <button style="color: black;" ion-button icon-left (click)="addImage()" item-end>
+        <ion-icon name="ios-add-outline"></ion-icon>
+        Tambah Lampiran Bukti
+      </button>
+    </ion-item-divider>
+    <ion-item-sliding>
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img
+            [defaultImage]="defaultPicture"
+            [lazyLoad]="shipment.attachment | get:'url'"
+            [offset]="imageLoadOffset$() | async"
+            [imageViewer]="shipment.attachment | get:'url'"
+            [alt]="shipment.attachment | get:'meta.name'">
+        </ion-thumbnail>
+        <h2 text-wrap *ngIf="shipment.attachment | get:'id':false">{{ shipment.attachment | get:'meta.name':'-' }}</h2>
+        <p text-center *ngIf="!shipment.attachment | get:'id':false"><em style="color: black;">Tidak ada bukti</em></p>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+  <div padding>
+    <button ion-button icon-left block (click)="submit()">
+      <ion-icon name="ios-send-outline"></ion-icon>
+      Kirim
+    </button>
+  </div>
+</ion-content>

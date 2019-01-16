@@ -1,0 +1,24 @@
+page-product-detail {
+  .product-thumbnail{
+    width: 100%;
+
+    img{
+      width: 100%;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0px;
+
+    &.rating li {
+      padding: 3px 5px !important;
+      background: none;
+      color: #ffb400;
+
+      ion-icon {
+        font-size: 25px;
+      }
+    }
+  }
+}

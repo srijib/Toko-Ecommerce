@@ -1,0 +1,59 @@
+page-login {
+  .content{
+   // background: url('../assets/img/background.gif');
+    background-size: cover;
+
+    .grid, .row{
+      // height: 100%;
+    }
+  }
+
+  .logo{
+    background: transparent;
+    width: 100px;
+  }
+  .item-inner{
+    border: transparent !important;
+  }
+
+  .input-login{
+    margin: 30px 0;
+  }
+  .text-input-ios{
+    text-align: center;
+    border-bottom: solid 1px aqua;
+    color: black;
+  }
+
+  .biru{
+background-color: #A0DFFE !important
+  }
+  .toolbar-background-ios,.toolbar-background-md{
+    
+    background:#A0DFFE
+  }
+  .signup{
+    // position: fixed;
+    // bottom: 0;
+    width: 100%;
+    // left: 0;
+    background: #A0DFFE;
+    color: black;
+    letter-spacing: 2px;
+  }
+
+  $social-facebook:#3b5998;
+  $social-facebook-color:#FFF;
+  $social-facebook-active:#23345a;
+  $social-facebook-hover:#2d4373;
+
+  .social-button-facebook{
+  	background: $social-facebook;
+  	color:$social-facebook-color;
+  	&:active{
+  		background-color: $social-facebook-active;
+     }&:hover , &:visited {
+      background-color: $social-facebook-hover;
+    }
+  }
+}

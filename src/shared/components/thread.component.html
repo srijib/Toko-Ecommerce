@@ -1,0 +1,49 @@
+<ion-item text-wrap>
+        <ion-card padding>
+
+                <ion-item>
+                  <ion-avatar item-start>
+                    <img [src]="thread.user.propict">
+                  </ion-avatar>
+                  <h2>{{thread.user.name}}</h2>
+                  <p>{{thread.created_at | date:'medium'}}</p>
+                </ion-item>
+              
+              
+              
+                <ion-card-content>
+                    <div style="margin:30px 0">
+                    <h2>{{thread.caption}}</h2>
+                     <p>   {{thread.content}}</p>
+                  <ion-badge color="dark">  {{thread.category}}</ion-badge>
+                </div>
+                </ion-card-content>
+              
+                <ion-row>
+
+                 
+                  <ion-col>
+                    <button ion-button icon-start clear color="dark" small (click)="viewComments(thread.id)">
+                      <ion-icon name="text"></ion-icon>
+                      <div>{{thread.summary.comments}} </div>
+                    </button>
+                  </ion-col>
+                  <ion-col center text-center>
+                        <button ion-button  icon-start clear small (click)="shareSheetShare(thread)" color="dark" clear>
+                                <ion-icon class="share-icon" name="share"></ion-icon>
+                                <div>Bagikan</div>
+                              </button>
+                  
+                  </ion-col>
+                  <ion-col  center text-center>
+                      <button   *ngIf="admin|| thread.user.id == user" ion-button icon-start  small (click)="Delete(thread)" color="dark" clear>
+                              <ion-icon name="trash"></ion-icon>
+                              <div>Hapus</div>
+                            </button>
+                
+                </ion-col>
+                </ion-row>
+                
+              </ion-card>
+      
+    </ion-item>
